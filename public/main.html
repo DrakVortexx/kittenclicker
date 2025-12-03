@@ -1160,8 +1160,8 @@
 <!-- Open Shop Button (hidden, now using top-buttons) -->
 <button id="openShopBtn" style="display: none;">🛒 Shop</button>
 
-<!-- Auth Button -->
-<div id="authContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 1002;">
+<!-- Auth Button (hidden - authentication no longer required) -->
+<div id="authContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 1002; display: none;">
   <button id="authButton" style="padding: 12px 20px; background: linear-gradient(to right, #c2185b, #e91e63); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
     Sign In
   </button>
@@ -1816,16 +1816,8 @@ let achievementsData = [
     }
   }
 
-  // Function to open overlays (now checks authentication)
+  // Function to open overlays
   function openOverlay(id) {
-    // If user is not authenticated and trying to open protected overlays
-    if (!currentUser && ['progressOverlay', 'settingsOverlay', 'achievementsOverlay', 'breedsOverlay'].includes(id)) {
-      // Show auth overlay first
-      showAuthOverlay();
-      authOverlayOpen = true;
-      return;
-    }
-    
     const el = document.getElementById(id);
     if (el) el.style.display = 'block';
     if(id === 'achievementsOverlay') renderAchievements();
