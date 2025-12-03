@@ -1526,7 +1526,7 @@ function getTrackingId() {
 // Game state variables (existing code remains unchanged)
 let kittens = 0, clickValue = 1;
 let upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0};
-let upgradeCosts = {milkBowl:25,catFood:115,scratcher:700,kittenFactory:5000,cityOfKittens:30000,worldOfMeows:200000,autoClicker:2000,autoKittenFarm:15000,kittenPlanet:1000000,goldKitty:15000000};
+let upgradeCosts = {milkBowl:15,catFood:50,scratcher:200,kittenFactory:1000,cityOfKittens:5000,worldOfMeows:25000,autoClicker:100,autoKittenFarm:500,kittenPlanet:10000,goldKitty:500000};
 let selectedBreed = "american_shorthair";
 let breedsUnlocked = { 
     american_shorthair: true, 
@@ -1557,12 +1557,12 @@ let breedNames = {
 };
 let extraCPSBreed = {
     american_shorthair: 0,
-    maine_coon: 5,
-    siamese: 20,
-    himalayan: 7,
-    halloween_cat: 100,
-    christmas_kitten: 125,
-    cat_of_the_cosmos: 400
+    maine_coon: 10,
+    siamese: 50,
+    himalayan: 25,
+    halloween_cat: 200,
+    christmas_kitten: 250,
+    cat_of_the_cosmos: 1000
 };
 let achievementsData = [
     { id: 'click1', text: 'CLICK: Click the kitten!', achieved: false, condition: () => kittens > 0 },
@@ -1763,22 +1763,22 @@ let achievementsData = [
       // Lock logic
       if (!breedsUnlocked[breed]) {
         if (breed === "maine_coon") {
-          label += `<span class="breed-lock">🔒 (3 achievements required)</span>`;
+          label += `<span class="breed-lock">🔒 (2 achievements required)</span>`;
         } else if (breed === "siamese") {
-          label += `<span class="breed-lock">🔒 (10 achievements required)</span>`;
+          label += `<span class="breed-lock">🔒 (5 achievements required)</span>`;
         } else if (breed === "himalayan") {
-          label += `<span class="breed-lock">🔒 (13 achievements required)</span>`;
+          label += `<span class="breed-lock">🔒 (8 achievements required)</span>`;
         } else if (breed === "cat_of_the_cosmos") {
-          label += `<span class="breed-lock">🔒 (20 achievements required)</span>`;
+          label += `<span class="breed-lock">🔒 (15 achievements required)</span>`;
         }
       }
 
       // Bonus text
       let bonusText = "";
-      if (breed === "maine_coon") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +5 CPS</div>";
-      if (breed === "siamese") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +20 CPS</div>";
-      if (breed === "himalayan") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +30 Click Value & +7 CPS</div>";
-      if (breed === "cat_of_the_cosmos") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +300 Click Value & +400 CPS</div>";
+      if (breed === "maine_coon") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +10 CPS & +5 Click Value</div>";
+      if (breed === "siamese") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +50 CPS & +50 Click Value</div>";
+      if (breed === "himalayan") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +25 CPS & +75 Click Value</div>";
+      if (breed === "cat_of_the_cosmos") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +1000 CPS & +500 Click Value</div>";
 
       div.innerHTML = `
         <div style="font-size:20px;margin-bottom:8px;">${label}</div>
@@ -1820,7 +1820,7 @@ let achievementsData = [
     // Lock logic for Halloween cat
     if (!breedsUnlocked.halloween_cat) {
       if (isHalloween) {
-        halloweenLabel += `<span class="breed-lock">🔒 (100k score & 15 achievements required)</span>`;
+        halloweenLabel += `<span class="breed-lock">🔒 (50k kittens & 10 achievements required)</span>`;
       } else {
         halloweenLabel += `<span class="breed-lock">🔒 (Only available Oct 20-31)</span>`;
       }
@@ -1837,7 +1837,7 @@ let achievementsData = [
             ${selectedBreed==='halloween_cat' ? "Selected" : "Select"}
           </button>
         </div>
-        <div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +100 CPS & +100 Click Value</div>
+        <div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +200 CPS & +200 Click Value</div>
       `;
       
       // Add to breedsList instead of eventsContent
@@ -1867,7 +1867,7 @@ let achievementsData = [
     // Lock logic for Christmas kitten
     if (!breedsUnlocked.christmas_kitten) {
       if (isChristmas) {
-        christmasLabel += `<span class="breed-lock">🔒 (30k clicks & 12 achievements required)</span>`;
+        christmasLabel += `<span class="breed-lock">🔒 (10k clicks & 8 achievements required)</span>`;
       } else {
         christmasLabel += `<span class="breed-lock">🔒 (Only available Dec 12-31)</span>`;
       }
@@ -1884,7 +1884,7 @@ let achievementsData = [
             ${selectedBreed==='christmas_kitten' ? "Selected" : "Select"}
           </button>
         </div>
-        <div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +125 CPS & +25 Click Value</div>
+        <div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +250 CPS & +150 Click Value</div>
       `;
       
       // Add to breedsList
@@ -2298,9 +2298,9 @@ let achievementsData = [
     
     // Check breed unlocks after checking all achievements
     const breedUnlocks = [
-      { breed: "maine_coon", requiredAchievements: 3, message: "You unlocked the Maine Coon breed!" },
-      { breed: "siamese", requiredAchievements: 10, message: "You unlocked the Siamese breed!" },
-      { breed: "himalayan", requiredAchievements: 13, message: "You unlocked the Himalayan breed!" }
+      { breed: "maine_coon", requiredAchievements: 2, message: "You unlocked the Maine Coon breed!" },
+      { breed: "siamese", requiredAchievements: 5, message: "You unlocked the Siamese breed!" },
+      { breed: "himalayan", requiredAchievements: 8, message: "You unlocked the Himalayan breed!" }
     ];
 
     for (const unlock of breedUnlocks) {
@@ -2315,7 +2315,7 @@ let achievementsData = [
     // Check if we can unlock Halloween cat
     if (!breedsUnlocked.halloween_cat) {
       const achievementCount = achievementsData.filter(a => a.achieved).length;
-      if (achievementCount >= 15) {
+      if (achievementCount >= 10 && kittens >= 50000) {
         // Unlock Halloween cat if it's Halloween season
         const now = new Date();
         const isHalloween = (now.getMonth() === 9 && now.getDate() >= 20 && now.getDate() <= 31) || 
@@ -2335,7 +2335,7 @@ let achievementsData = [
       const now = new Date();
       const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
       
-      if (isChristmas && manualClickCount >= 30000 && achievementCount >= 12) {
+      if (isChristmas && manualClickCount >= 10000 && achievementCount >= 8) {
         breedsUnlocked.christmas_kitten = true;
         showNotification("You unlocked the Christmas Kitten! It will remain unlocked.");
         achievementsChanged = true;
@@ -2345,7 +2345,7 @@ let achievementsData = [
     // Check for Cat of the Cosmos unlock
     if (!breedsUnlocked.cat_of_the_cosmos) {
       const achievementCount = achievementsData.filter(a => a.achieved).length;
-      if (achievementCount >= 20) {
+      if (achievementCount >= 15) {
         breedsUnlocked.cat_of_the_cosmos = true;
         showNotification("You unlocked the Cat of the Cosmos! It will remain unlocked.");
         achievementsChanged = true;
@@ -2472,16 +2472,18 @@ let achievementsData = [
     
     // --- Breed click bonus ---
     let breedClickBonus = 0;
-    if (selectedBreed === 'siamese') {
-      breedClickBonus = 20;
+    if (selectedBreed === 'maine_coon') {
+      breedClickBonus = 5;
+    } else if (selectedBreed === 'siamese') {
+      breedClickBonus = 50;
     } else if (selectedBreed === 'himalayan') {
-      breedClickBonus = 30;
+      breedClickBonus = 75;
     } else if (selectedBreed === 'halloween_cat') {
-      breedClickBonus = 100;
+      breedClickBonus = 200;
     } else if (selectedBreed === 'christmas_kitten') {
-      breedClickBonus = 25;
+      breedClickBonus = 150;
     } else if (selectedBreed === 'cat_of_the_cosmos') {
-      breedClickBonus = 300;
+      breedClickBonus = 500;
     }
 
     // Apply click bonus multiplier
@@ -2586,7 +2588,7 @@ let achievementsData = [
       kittens -= upgradeCosts[name];
       clickValue += increment;
       upgrades[name]++;
-      upgradeCosts[name] = Math.ceil(upgradeCosts[name] * 1.2);
+      upgradeCosts[name] = Math.ceil(upgradeCosts[name] * 1.15);
       updateUI();
     }
   }
@@ -2595,7 +2597,7 @@ let achievementsData = [
     if (kittens >= upgradeCosts.autoClicker) {
       kittens -= upgradeCosts.autoClicker;
       upgrades.autoClicker++;
-      upgradeCosts.autoClicker = Math.ceil(upgradeCosts.autoClicker * 1.2);
+      upgradeCosts.autoClicker = Math.ceil(upgradeCosts.autoClicker * 1.15);
       updateUI();
     }
   }
@@ -2604,7 +2606,7 @@ let achievementsData = [
     if (kittens >= upgradeCosts.autoKittenFarm) {
       kittens -= upgradeCosts.autoKittenFarm;
       upgrades.autoKittenFarm++;
-      upgradeCosts.autoKittenFarm = Math.ceil(upgradeCosts.autoKittenFarm * 1.2);
+      upgradeCosts.autoKittenFarm = Math.ceil(upgradeCosts.autoKittenFarm * 1.15);
       updateUI();
     }
   }
@@ -2613,7 +2615,7 @@ let achievementsData = [
     if (kittens >= upgradeCosts.kittenPlanet) {
       kittens -= upgradeCosts.kittenPlanet;
       upgrades.kittenPlanet++;
-      upgradeCosts.kittenPlanet = Math.ceil(upgradeCosts.kittenPlanet * 1.2);
+      upgradeCosts.kittenPlanet = Math.ceil(upgradeCosts.kittenPlanet * 1.15);
       updateUI();
     }
   }
@@ -2707,7 +2709,7 @@ let achievementsData = [
     if (breed === 'cat_of_the_cosmos') {
       const achievementCount = achievementsData.filter(a => a.achieved).length;
       if (achievementCount < 20) {
-        showNotification("You need 20 achievements to unlock the Cat of the Cosmos!");
+        showNotification("You need 15 achievements to unlock the Cat of the Cosmos!");
         return;
       }
       
@@ -2735,8 +2737,8 @@ let achievementsData = [
         }
         
         const achievementCount = achievementsData.filter(a => a.achieved).length;
-        if (kittens < 100000 || achievementCount < 15) {
-          showNotification("You need 100,000 kittens and 15 achievements to unlock the Halloween Cat!");
+        if (kittens < 50000 || achievementCount < 10) {
+          showNotification("You need 50,000 kittens and 10 achievements to unlock the Halloween Cat!");
           return;
         }
         
@@ -2762,8 +2764,8 @@ let achievementsData = [
         }
         
         const achievementCount = achievementsData.filter(a => a.achieved).length;
-        if (manualClickCount < 30000 || achievementCount < 12) {
-          showNotification("You need 30,000 clicks and 12 achievements to unlock the Christmas Kitten!");
+        if (manualClickCount < 10000 || achievementCount < 8) {
+          showNotification("You need 10,000 clicks and 8 achievements to unlock the Christmas Kitten!");
           return;
         }
         
@@ -2865,7 +2867,7 @@ let achievementsData = [
     if(confirm('Are you sure you want to reset all progress?')) {
       kittens = 0; clickValue = 1;
       upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0};
-      upgradeCosts = {milkBowl:25,catFood:115,scratcher:700,kittenFactory:5000,cityOfKittens:30000,worldOfMeows:200000,autoClicker:2000,autoKittenFarm:15000,kittenPlanet:1000000,goldKitty:15000000};
+      upgradeCosts = {milkBowl:15,catFood:50,scratcher:200,kittenFactory:1000,cityOfKittens:5000,worldOfMeows:25000,autoClicker:100,autoKittenFarm:500,kittenPlanet:10000,goldKitty:500000};
       selectedBreed = "american_shorthair";
       breedsUnlocked = { american_shorthair: true, maine_coon: false, siamese: false, himalayan: false, halloween_cat: false, christmas_kitten: false, cat_of_the_cosmos: false };
       for(let a of achievementsData) a.achieved = false;
@@ -3133,7 +3135,7 @@ let achievementsData = [
       kittens = 0;
       clickValue = 1;
       upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0};
-      upgradeCosts = {milkBowl:25,catFood:115,scratcher:700,kittenFactory:5000,cityOfKittens:30000,worldOfMeows:200000,autoClicker:2000,autoKittenFarm:15000,kittenPlanet:1000000,goldKitty:15000000};
+      upgradeCosts = {milkBowl:15,catFood:50,scratcher:200,kittenFactory:1000,cityOfKittens:5000,worldOfMeows:25000,autoClicker:100,autoKittenFarm:500,kittenPlanet:10000,goldKitty:500000};
       
       // Show notification
       showNotification(`Prestige Level ${prestigeLevel}! Bonuses applied.`);
