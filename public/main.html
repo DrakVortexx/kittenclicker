@@ -1419,6 +1419,26 @@ const database = firebase.database();
 let currentUser = null;
 let authOverlayOpen = false;
 let userId = '';
+let sessionId = '';
+
+// Generate or retrieve session ID for player tracking
+function getSessionId() {
+  if (!sessionId) {
+    // Try to get from localStorage first
+    sessionId = localStorage.getItem('kittenSessionId');
+    if (!sessionId) {
+      // Generate a new session ID
+      sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('kittenSessionId', sessionId);
+    }
+  }
+  return sessionId;
+}
+
+// Get user ID for tracking (use userId if authenticated, otherwise use sessionId)
+function getTrackingId() {
+  return userId || getSessionId();
+}
 
 // Game state variables (existing code remains unchanged)
 let kittens = 0, clickValue = 1;
@@ -1997,6 +2017,30 @@ let achievementsData = [
     }
   }
 
+  // Send heartbeat to server to indicate active player
+  async function sendHeartbeat() {
+    try {
+      const trackingId = getTrackingId();
+      await fetch('/heartbeat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId: trackingId })
+      });
+    } catch (error) {
+      console.error('Error sending heartbeat:', error);
+    }
+  }
+
+  // Start sending heartbeats periodically
+  function startHeartbeat() {
+    // Send initial heartbeat
+    sendHeartbeat();
+    // Then send every 10 seconds
+    setInterval(sendHeartbeat, 10000);
+  }
+
   // Real-time player count using Server-Sent Events
   function startPlayerCountStream() {
     const eventSource = new EventSource('/player-count-stream');
@@ -2030,21 +2074,16 @@ let achievementsData = [
 
   // Save user data to /userlist
   async function saveToUserList() {
-    // If not authenticated with Firebase, use a local ID for the userlist
-    if (!userId) {
-      // This part might conflict with Firebase's userId.
-      // For consistency, if Firebase is used, userId should come from Firebase.
-      // If not, a local one can be generated.
-      // For now, let's assume userId is set by Firebase auth or is empty.
-      // If userId is empty, it means no Firebase user is logged in.
-      // We might want to use a persistent local ID for unauthenticated users.
-      // For this example, we'll skip saving to userlist if not authenticated via Firebase.
+    // Use tracking ID (userId if authenticated, sessionId if not)
+    const trackingId = getTrackingId();
+    
+    if (!trackingId) {
       return; 
     }
     
     try {
       const saveData = { 
-        userId, 
+        userId: trackingId, 
         playerCount: kittens, 
         kittens, 
         clickValue, 
@@ -2708,6 +2747,13 @@ let achievementsData = [
     updatePrestigeInfo();
     updatePlayerCount();
     startPlayerCountStream(); // Start real-time updates
+    startHeartbeat(); // Start sending heartbeats
+    
+    // Ensure shop overlay is closed on page load
+    const shopOverlay = document.getElementById('shopOverlay');
+    if (shopOverlay) {
+      shopOverlay.style.display = 'none';
+    }
     
     // Check for offline bonus
     if (lastSeenTime > 0) {
