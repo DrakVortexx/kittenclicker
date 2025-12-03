@@ -17,6 +17,11 @@ app.use(express.static(PUBLIC_DIR));
 // Each user will have { lastUpdated: timestamp, playerCount: number, ...otherData }
 const userData = new Map();
 
+// Track active player sessions
+// Each session: { userId, lastHeartbeat: timestamp }
+const activeSessions = new Map();
+const SESSION_TIMEOUT = 30000; // 30 seconds - consider a user inactive after this
+
 // Ensure data directory exists
 async function ensureDataDir() {
   try {
@@ -72,17 +77,52 @@ app.post('/userlist', async (req, res) => {
   }
 });
 
+// Heartbeat endpoint to track active players
+app.post('/heartbeat', (req, res) => {
+  try {
+    const { userId } = req.body;
+    
+    if (!userId || typeof userId !== 'string') {
+      return res.status(400).json({ error: 'Missing or invalid userId' });
+    }
+
+    // Update or create session
+    activeSessions.set(userId, {
+      userId,
+      lastHeartbeat: Date.now()
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error processing heartbeat:', error);
+    res.status(500).json({ error: 'Failed to process heartbeat' });
+  }
+});
+
+// Clean up inactive sessions periodically
+setInterval(() => {
+  const now = Date.now();
+  for (const [userId, session] of activeSessions.entries()) {
+    if (now - session.lastHeartbeat > SESSION_TIMEOUT) {
+      activeSessions.delete(userId);
+    }
+  }
+}, 10000); // Clean up every 10 seconds
+
 // Endpoint to get global player counts
 app.get('/player-count', (req, res) => {
+  // Count active players (those who sent heartbeat recently)
+  const now = Date.now();
   let current = 0;
-  let total = 0;
-
-  userData.forEach(user => {
-    if (user.playerCount && typeof user.playerCount === 'number') {
-      current += user.playerCount;
-      total += user.playerCount; // Could also track total separately if needed
+  
+  for (const [userId, session] of activeSessions.entries()) {
+    if (now - session.lastHeartbeat <= SESSION_TIMEOUT) {
+      current++;
     }
-  });
+  }
+
+  // Total is the number of unique users who have ever played
+  const total = userData.size;
 
   res.json({ current, total });
 });
@@ -98,15 +138,18 @@ app.get('/player-count-stream', (req, res) => {
 
   // Function to send current counts
   const sendCounts = () => {
+    // Count active players (those who sent heartbeat recently)
+    const now = Date.now();
     let current = 0;
-    let total = 0;
-
-    userData.forEach(user => {
-      if (user.playerCount && typeof user.playerCount === 'number') {
-        current += user.playerCount;
-        total += user.playerCount;
+    
+    for (const [userId, session] of activeSessions.entries()) {
+      if (now - session.lastHeartbeat <= SESSION_TIMEOUT) {
+        current++;
       }
-    });
+    }
+
+    // Total is the number of unique users who have ever played
+    const total = userData.size;
 
     res.write(`data: ${JSON.stringify({ current, total })}\n\n`);
   };
