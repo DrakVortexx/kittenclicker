@@ -1451,6 +1451,7 @@ let breedsUnlocked = {
     siamese: false,
     himalayan: false,
     halloween_cat: false,
+    christmas_kitten: false,
     cat_of_the_cosmos: false
 };
 let breedImages = {
@@ -1459,6 +1460,7 @@ let breedImages = {
     siamese: "https://cdn.pixabay.com/photo/2017/02/15/12/12/cat-2068462_1280.jpg",
     himalayan: "https://cdn.pixabay.com/photo/2016/03/24/21/21/cat-1277665_1280.jpg",
     halloween_cat: "https://cdn.pixabay.com/photo/2022/08/06/15/46/halloween-7368864_1280.jpg",
+    christmas_kitten: "https://cdn.pixabay.com/photo/2016/12/11/02/32/cat-1898638_1280.jpg",
     cat_of_the_cosmos: "https://cdn.pixabay.com/photo/2025/11/10/12/55/cat-9947981_1280.png"
 };
 let breedNames = {
@@ -1467,6 +1469,7 @@ let breedNames = {
     siamese: "Siamese",
     himalayan: "Himalayan",
     halloween_cat: "Halloween Cat",
+    christmas_kitten: "Christmas Kitten",
     cat_of_the_cosmos: "Cat of the Cosmos"
 };
 let extraCPSBreed = {
@@ -1475,6 +1478,7 @@ let extraCPSBreed = {
     siamese: 20,
     himalayan: 7,
     halloween_cat: 100,
+    christmas_kitten: 125,
     cat_of_the_cosmos: 400
 };
 let achievementsData = [
@@ -1489,6 +1493,7 @@ let achievementsData = [
     { id: 'mystery1', text: 'Take a chance: Try the Mystery Kitten!', achieved: false, condition: () => window.usedMysteryKitten },
     { id: 'click100k', text: 'Dedicated Paw-sion: Reach 100,000 clicks!', achieved: false, condition: () => kittens >= 100000 },
     { id: 'halloween_unlock', text: 'Spooky Surprise: Unlock the Halloween Cat!', achieved: false, condition: () => breedsUnlocked.halloween_cat },
+    { id: 'christmas_unlock', text: 'Holiday Cheer: Unlock the Christmas Kitten!', achieved: false, condition: () => breedsUnlocked.christmas_kitten },
     { id: 'click500', text: 'Click Master: Reach 500 clicks', achieved: false, condition: () => kittens >= 500 },
     { id: 'click5000', text: 'Click Expert: Reach 5000 clicks', achieved: false, condition: () => kittens >= 5000 },
     { id: 'click25000', text: 'Click Pro: Reach 25000 clicks', achieved: false, condition: () => kittens >= 25000 },
@@ -1756,8 +1761,55 @@ let achievementsData = [
       list.appendChild(halloweenDiv);
     }
 
+    // Add Christmas Kitten in the events section (Dec 12-31)
+    const christmasDiv = document.createElement('div');
+    christmasDiv.style.margin = "28px 0 25px 0";
+    christmasDiv.style.padding = "12px";
+    christmasDiv.style.background = "#fff6f6";
+    christmasDiv.style.borderRadius = "12px";
+    christmasDiv.style.boxShadow = "0 2px 12px #f8bbd0";
+    christmasDiv.style.maxWidth = "340px";
+    christmasDiv.style.marginLeft = "auto";
+    christmasDiv.style.marginRight = "auto";
+
+    let christmasLabel = `<b>${breedNames.christmas_kitten}</b>`;
+    
+    // Add event tag for Christmas kitten
+    const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
+    
+    if (isChristmas) {
+      christmasLabel += `<span class="breed-event-tag">EVENT</span>`;
+    }
+
+    // Lock logic for Christmas kitten
+    if (!breedsUnlocked.christmas_kitten) {
+      if (isChristmas) {
+        christmasLabel += `<span class="breed-lock">🔒 (30k clicks & 12 achievements required)</span>`;
+      } else {
+        christmasLabel += `<span class="breed-lock">🔒 (Only available Dec 12-31)</span>`;
+      }
+    }
+
+    // Only show Christmas kitten during Christmas season (or if unlocked)
+    if (isChristmas || breedsUnlocked.christmas_kitten) {
+      christmasDiv.innerHTML = `
+        <div style="font-size:20px;margin-bottom:8px;">${christmasLabel}</div>
+        <img src="${breedImages.christmas_kitten}" alt="${breedNames.christmas_kitten}" style="width:120px;border-radius:14px;box-shadow:0 2px 8px #f8bbd0;">
+        <div style="margin-top:7px;">
+          <button class="breed-select-btn${selectedBreed==='christmas_kitten'?" selected":""}"
+            onclick="selectBreed('christmas_kitten')">
+            ${selectedBreed==='christmas_kitten' ? "Selected" : "Select"}
+          </button>
+        </div>
+        <div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +125 CPS & +25 Click Value</div>
+      `;
+      
+      // Add to breedsList
+      list.appendChild(christmasDiv);
+    }
+
     // Hide the events tab if there's nothing to show
-    if (!isHalloween) {
+    if (!isHalloween && !isChristmas && !breedsUnlocked.christmas_kitten) {
       document.getElementById('tabEvents').style.display = 'none';
     } else {
       document.getElementById('tabEvents').style.display = 'inline-block';
@@ -2202,6 +2254,19 @@ let achievementsData = [
       }
     }
     
+    // Check if we can unlock Christmas kitten
+    if (!breedsUnlocked.christmas_kitten) {
+      const achievementCount = achievementsData.filter(a => a.achieved).length;
+      const now = new Date();
+      const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
+      
+      if (isChristmas && manualClickCount >= 30000 && achievementCount >= 12) {
+        breedsUnlocked.christmas_kitten = true;
+        showNotification("You unlocked the Christmas Kitten! It will remain unlocked.");
+        achievementsChanged = true;
+      }
+    }
+    
     // Check for Cat of the Cosmos unlock
     if (!breedsUnlocked.cat_of_the_cosmos) {
       const achievementCount = achievementsData.filter(a => a.achieved).length;
@@ -2324,6 +2389,8 @@ let achievementsData = [
       breedClickBonus = 30;
     } else if (selectedBreed === 'halloween_cat') {
       breedClickBonus = 100;
+    } else if (selectedBreed === 'christmas_kitten') {
+      breedClickBonus = 25;
     } else if (selectedBreed === 'cat_of_the_cosmos') {
       breedClickBonus = 300;
     }
@@ -2568,22 +2635,52 @@ let achievementsData = [
       const isHalloween = (now.getMonth() === 9 && now.getDate() >= 20 && now.getDate() <= 31) || 
                           (now.getMonth() === 10 && now.getDate() <= 1);
       
-      // Check if it's Halloween season and requirements are met
-      if (!isHalloween) {
-        showNotification("Halloween Cat is only available from Oct 20-31!");
-        return;
-      }
-      
-      const achievementCount = achievementsData.filter(a => a.achieved).length;
-      if (kittens < 100000 || achievementCount < 15) {
-        showNotification("You need 100,000 kittens and 15 achievements to unlock the Halloween Cat!");
-        return;
-      }
-      
-      // Unlock the breed if requirements are met
-      if (!breedsUnlocked[breed]) {
+      // If already unlocked, allow selection anytime
+      if (breedsUnlocked[breed]) {
+        // Allow selection
+      } else {
+        // Check if it's Halloween season and requirements are met
+        if (!isHalloween) {
+          showNotification("Halloween Cat is only available from Oct 20-31!");
+          return;
+        }
+        
+        const achievementCount = achievementsData.filter(a => a.achieved).length;
+        if (kittens < 100000 || achievementCount < 15) {
+          showNotification("You need 100,000 kittens and 15 achievements to unlock the Halloween Cat!");
+          return;
+        }
+        
+        // Unlock the breed if requirements are met
         breedsUnlocked[breed] = true;
         showNotification("You unlocked the Halloween Cat! It will remain unlocked.");
+      }
+    }
+
+    // Check if it's Christmas kitten and requirements are met
+    if (breed === 'christmas_kitten') {
+      const now = new Date();
+      const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
+      
+      // If already unlocked, allow selection anytime
+      if (breedsUnlocked[breed]) {
+        // Allow selection
+      } else {
+        // Check if it's Christmas season and requirements are met
+        if (!isChristmas) {
+          showNotification("Christmas Kitten is only available from Dec 12-31!");
+          return;
+        }
+        
+        const achievementCount = achievementsData.filter(a => a.achieved).length;
+        if (manualClickCount < 30000 || achievementCount < 12) {
+          showNotification("You need 30,000 clicks and 12 achievements to unlock the Christmas Kitten!");
+          return;
+        }
+        
+        // Unlock the breed if requirements are met
+        breedsUnlocked[breed] = true;
+        showNotification("You unlocked the Christmas Kitten! It will remain unlocked.");
       }
     }
 
@@ -2681,7 +2778,7 @@ let achievementsData = [
       upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0};
       upgradeCosts = {milkBowl:25,catFood:115,scratcher:700,kittenFactory:5000,cityOfKittens:30000,worldOfMeows:200000,autoClicker:2000,autoKittenFarm:15000,kittenPlanet:1000000,goldKitty:15000000};
       selectedBreed = "american_shorthair";
-      breedsUnlocked = { american_shorthair: true, maine_coon: false, siamese: false, himalayan: false, halloween_cat: false, cat_of_the_cosmos: false };
+      breedsUnlocked = { american_shorthair: true, maine_coon: false, siamese: false, himalayan: false, halloween_cat: false, christmas_kitten: false, cat_of_the_cosmos: false };
       for(let a of achievementsData) a.achieved = false;
       bonusUpgrades = { speedBoost: 0, doublePoints: 0, goldenPaws: 0 };
       bonusUpgradeCosts = { speedBoost: 5000, doublePoints: 15000, goldenPaws: 50000 };
