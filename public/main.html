@@ -123,6 +123,8 @@
     z-index: 10;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     border: 5px solid white;
+    pointer-events: auto;
+    touch-action: manipulation;
   }
 
   img#kitten:hover {
@@ -969,66 +971,6 @@
     100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
   }
 
-  /* --- Auth Overlay --- */
-  #authOverlay {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 320px;
-    background: rgba(255, 255, 255, 0.98);
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    padding: 30px;
-    z-index: 1002;
-    display: none;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-  }
-  
-  #authOverlay.active {
-    display: block;
-  }
-  
-  #authOverlay h2 {
-    margin-top: 0;
-    color: #c2185b;
-    font-size: 2rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-  }
-  
-  #authOverlay input {
-    width: 90%;
-    padding: 12px;
-    font-size: 16px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: 2px solid #f8bbd0;
-    background: white;
-  }
-  
-  #authOverlay button {
-    margin: 10px 0;
-    padding: 12px 24px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    width: 90%;
-  }
-  
-  #signInButton {
-    background: linear-gradient(to right, #c2185b, #e91e63);
-    color: white;
-  }
-  
-  #signUpButton {
-    background: linear-gradient(to right, #4caf50, #81c784);
-    color: white;
-  }
 
   /* New styles for bonus shop items */
   .bonus-shop-item {
@@ -1162,11 +1104,7 @@
 <button id="openShopBtn" style="display: none;">🛒 Shop</button>
 
 <!-- Auth Button (hidden - authentication no longer required) -->
-<div id="authContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 1002; display: none;">
-  <button id="authButton" style="padding: 12px 20px; background: linear-gradient(to right, #c2185b, #e91e63); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-    Sign In
-  </button>
-</div>
+ 
 
 <!-- Prestige Overlay -->
 <div id="prestigeOverlay">
@@ -1399,40 +1337,9 @@
 </div>
 
 <!-- Auth Overlay -->
-<div id="authOverlay">
-  <button class="closeOverlay" onclick="closeAuthOverlay()">×</button>
-  <h2>Authentication</h2>
-  <div id="authForm">
-    <input type="email" id="authEmail" placeholder="Email" style="width: 90%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 2px solid #f8bbd0; background: white;">
-    <input type="password" id="authPassword" placeholder="Password" style="width: 90%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 2px solid #f8bbd0; background: white;">
-    <button id="signInButton" onclick="signIn(document.getElementById('authEmail').value, document.getElementById('authPassword').value)" style="margin: 10px 0; padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; font-size: 16px; background: linear-gradient(to right, #c2185b, #e91e63); color: white; font-weight: bold;">Sign In</button>
-    <button id="signUpButton" onclick="signUp(document.getElementById('authEmail').value, document.getElementById('authPassword').value)" style="margin: 10px 0; padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; font-size: 16px; background: linear-gradient(to right, #4caf50, #81c784); color: white; font-weight: bold;">Sign Up</button>
-  </div>
-</div>
+ 
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCEg0uIXitNr9zGqj0DCBumG7AarwBVgRw",
-  authDomain: "kittenclickeraccount.firebaseapp.com",
-  projectId: "kittenclickeraccount",
-  storageBucket: "kittenclickeraccount.firebasestorage.app",
-  messagingSenderId: "905727568357",
-  appId: "1:905727568357:web:fca57de25b30d8c167670c",
-  measurementId: "G-KRL8TRQ8BJ"
-};
-
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const database = firebase.database();
-
-// Authentication state tracking
-let currentUser = null;
-let authOverlayOpen = false;
 let userId = '';
 let sessionId = '';
 
@@ -1649,36 +1556,7 @@ achievementsData.push(
   // Track manual clicks
   let manualClickCount = 0;
 
-  // Function to generate a unique user ID based on email
-  function generateUserId(email) {
-    // Simple hash function for email
-    let hash = 0;
-    for (let i = 0; i < email.length; i++) {
-      const char = email.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32bit integer
-    }
-    return Math.abs(hash).toString();
-  }
-
-  // Show authentication overlay
-  function showAuthOverlay() {
-    const overlay = document.getElementById('authOverlay');
-    if (overlay) {
-      overlay.style.display = 'block';
-      overlay.classList.add('active');
-    }
-  }
-
-  // Close authentication overlay
-  function closeAuthOverlay() {
-    const overlay = document.getElementById('authOverlay');
-    if (overlay) {
-      overlay.style.display = 'none';
-      overlay.classList.remove('active');
-    }
-    authOverlayOpen = false;
-  }
+  
 
   // --- SETTINGS LOGIC ---
   function updateSettingsUI() {
@@ -1909,14 +1787,7 @@ achievementsData.push(
       list.appendChild(div);
     });
   }
-
-    // Hide the events tab if there's nothing to show
-    if (!isHalloween && !isChristmas && !breedsUnlocked.christmas_kitten) {
-      document.getElementById('tabEvents').style.display = 'none';
-    } else {
-      document.getElementById('tabEvents').style.display = 'inline-block';
-    }
-  }
+  
 
   // Function to open overlays
   function openOverlay(id) {
@@ -1927,6 +1798,7 @@ achievementsData.push(
     } else {
       el.style.display = 'block';
     }
+    el.style.pointerEvents = 'auto';
     if(id === 'achievementsOverlay') renderAchievements();
     if(id === 'breedsOverlay') { renderBreeds(); renderFusionUI && renderFusionUI(); }
     if(id === 'settingsOverlay') updateSettingsUI();
@@ -1942,8 +1814,26 @@ achievementsData.push(
   // Close overlay function
   function closeOverlay(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
+    if (el) { el.style.display = 'none'; el.style.pointerEvents = 'none'; }
   }
+  
+  function resetOverlays() {
+    const overlays = document.querySelectorAll('.overlay');
+    overlays.forEach(el => { el.style.display = 'none'; el.style.pointerEvents = 'none'; });
+    const p = document.getElementById('prestigeOverlay');
+    if (p) { p.style.display = 'none'; p.style.pointerEvents = 'none'; }
+  }
+  
+  window.resetOverlays = resetOverlays;
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    resetOverlays();
+  });
+  
+  window.addEventListener('load', () => {
+    resetOverlays();
+    updateUI();
+  });
   
   // Function to create a notification
   function showNotification(text) {
@@ -1955,167 +1845,25 @@ achievementsData.push(
   }
 
   // Save user data to Firebase
-  function saveUserData() {
-    if (!userId) return;
-    
-    const userData = { 
-      kittens, 
-      clickValue, 
-      upgrades, 
-      upgradeCosts, 
-      selectedBreed, 
-      breedsUnlocked, 
-      achievementsData, 
-      userSettings, 
-      bonusUpgrades, 
-      bonusUpgradeCosts, 
-      prestigeLevel, 
-      offlineClicks, 
-      offlineClickCost, 
-      offlineBoost, 
-      offlineBoostCost, 
-      offlineEmpire, 
-      offlineEmpireCost, 
-      lastSeenTime 
-    };
-    
-    database.ref('users/' + userId).set(userData)
-      .then(() => {
-        console.log('Data saved successfully');
-      })
-      .catch((error) => {
-        console.error('Error saving data:', error);
-      });
-  }
+  
 
   // Load user data from Firebase
-  function loadUserData() {
-    if (!userId) return;
-    
-    database.ref('users/' + userId).once('value')
-      .then((snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          // Load all the saved data
-          kittens = data.kittens || 0;
-          clickValue = data.clickValue || 1;
-          upgrades = data.upgrades || upgrades;
-          upgradeCosts = data.upgradeCosts || upgradeCosts;
-          selectedBreed = data.selectedBreed || "american_shorthair";
-          breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
-          
-          if (Array.isArray(data.achievementsData)) {
-            for (let ach of data.achievementsData) {
-              const found = achievementsData.find(a => a.id === ach.id);
-              if (found) found.achieved = ach.achieved;
-            }
-          }
-          
-          if (data.userSettings) {
-            userSettings = data.userSettings;
-            applyTheme(userSettings.theme);
-          }
-          
-          if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
-          if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
-          if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
-          if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
-          if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
-          if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
-          if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
-          if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
-          if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
-          if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
-          
-          updateUI();
-          renderAchievements();
-          renderBreeds();
-          updatePrestigeInfo();
-        }
-      })
-      .catch((error) => {
-        console.error('Error loading data:', error);
-      });
-  }
+  
 
   // Toggle authentication state
-  function toggleAuthState() {
-    if (currentUser) {
-      // Sign out
-      auth.signOut().then(() => {
-        currentUser = null;
-        document.getElementById('authButton').textContent = 'Sign In';
-        document.getElementById('authButton').style.background = 'linear-gradient(to right, #c2185b, #e91e63)';
-        showNotification('Signed out successfully');
-      });
-    } else {
-      // Show auth overlay
-      showAuthOverlay();
-    }
-  }
+  
 
   // Handle sign in
-  function signIn(email, password) {
-    auth.signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        currentUser = userCredential.user;
-        userId = generateUserId(email);
-        document.getElementById('authButton').textContent = 'Sign Out';
-        document.getElementById('authButton').style.background = 'linear-gradient(to right, #b71c1c, #d32f2f)';
-        closeAuthOverlay();
-        showNotification('Signed in successfully');
-        
-        // Load user data from Firebase
-        loadUserData();
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        showNotification('Sign in failed: ' + errorMessage);
-      });
-  }
+  
 
   // Handle sign up
-  function signUp(email, password) {
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        currentUser = userCredential.user;
-        userId = generateUserId(email);
-        document.getElementById('authButton').textContent = 'Sign Out';
-        document.getElementById('authButton').style.background = 'linear-gradient(to right, #b71c1c, #d32f2f)';
-        closeAuthOverlay();
-        showNotification('Account created and signed in successfully');
-        
-        // Create user data in Firebase
-        saveUserData();
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        showNotification('Sign up failed: ' + errorMessage);
-      });
-  }
+  
 
   // Listen for auth state changes
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      currentUser = user;
-      userId = generateUserId(user.email);
-      document.getElementById('authButton').textContent = 'Sign Out';
-      document.getElementById('authButton').style.background = 'linear-gradient(to right, #b71c1c, #d32f2f)';
-    } else {
-      currentUser = null;
-      userId = '';
-      document.getElementById('authButton').textContent = 'Sign In';
-      document.getElementById('authButton').style.background = 'linear-gradient(to right, #c2185b, #e91e63)';
-    }
-  });
+  
 
   // Add event listener to auth button
-  document.getElementById('authButton').addEventListener('click', toggleAuthState);
-
-  // Add overlay closing functionality for auth overlay
-  document.querySelector('#authOverlay .closeOverlay').addEventListener('click', closeAuthOverlay);
+  
 
   // Create falling kitten emoji function
   function createFallingKitten() {
@@ -2164,12 +1912,16 @@ achievementsData.push(
     try {
       const response = await fetch('/player-count');
       const data = await response.json();
-      document.getElementById('currentPlayers').textContent = data.current.toLocaleString();
-      document.getElementById('totalPlayers').textContent = data.total.toLocaleString();
+      const cp = document.getElementById('currentPlayers');
+      const tp = document.getElementById('totalPlayers');
+      if (cp) cp.textContent = data.current.toLocaleString();
+      if (tp) tp.textContent = data.total.toLocaleString();
     } catch (error) {
       console.error('Error fetching player count:', error);
-      document.getElementById('currentPlayers').textContent = 'Error';
-      document.getElementById('totalPlayers').textContent = 'Error';
+      const cp = document.getElementById('currentPlayers');
+      const tp = document.getElementById('totalPlayers');
+      if (cp) cp.textContent = 'Error';
+      if (tp) tp.textContent = 'Error';
     }
   }
 
@@ -2197,25 +1949,46 @@ achievementsData.push(
     setInterval(sendHeartbeat, 10000);
   }
 
+  function initApp() {
+    try {
+      resetOverlays();
+      attachKittenHandlers();
+      updateUI();
+      renderDynamicShop();
+      renderBundles();
+      updatePrestigeInfo();
+      startHeartbeat();
+      startPlayerCountStream();
+      updatePlayerCount();
+    } catch (e) {
+      console.error('Initialization error:', e);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', initApp);
+  window.addEventListener('load', initApp);
+
   // Real-time player count using Server-Sent Events
   function startPlayerCountStream() {
-    const eventSource = new EventSource('/player-count-stream');
-    
-    eventSource.onmessage = function(event) {
-      try {
-        const data = JSON.parse(event.data);
-        document.getElementById('currentPlayers').textContent = data.current.toLocaleString();
-        document.getElementById('totalPlayers').textContent = data.total.toLocaleString();
-      } catch (e) {
-        console.error('Error parsing player count:', e);
-      }
-    };
-    
-    eventSource.onerror = function(err) {
-      console.error('Player count stream error:', err);
-      // Attempt to reconnect after 5 seconds
-      setTimeout(startPlayerCountStream, 5000);
-    };
+    try {
+      const eventSource = new EventSource('/player-count-stream');
+      eventSource.onmessage = function(event) {
+        try {
+          const data = JSON.parse(event.data);
+          const cp = document.getElementById('currentPlayers');
+          const tp = document.getElementById('totalPlayers');
+          if (cp) cp.textContent = data.current.toLocaleString();
+          if (tp) tp.textContent = data.total.toLocaleString();
+        } catch (e) {
+          console.error('Error parsing player count:', e);
+        }
+      };
+      eventSource.onerror = function(err) {
+        console.error('Player count stream error:', err);
+        setTimeout(startPlayerCountStream, 5000);
+      };
+    } catch (err) {
+      console.error('SSE unsupported or failed to initialize', err);
+    }
   }
 
   // Generate random 10-character ID (for local userlist save, if not using Firebase userId)
@@ -2579,35 +2352,32 @@ achievementsData.push(
     }
   }
   
-  // Ensure kitten click event is attached after DOM is ready
-
-  document.addEventListener('DOMContentLoaded', function() {
-    kittenImg.addEventListener('click', () => {
+  function attachKittenHandlers() {
+    if (!kittenImg) return;
+    const onClick = () => {
       clickSound.currentTime = 0;
       clickSound.volume = userSettings.notifVolume;
       clickSound.play();
-      
-      // Increment manual click counter
       manualClickCount++;
-      
-      // Play meow sound every 100 clicks
       if (manualClickCount % 100 === 0) {
         meowSound.currentTime = 0;
         meowSound.volume = userSettings.notifVolume;
         meowSound.play();
       }
-      
       addScore(clickValue);
-      
-      // Create falling kittens on click
       createMultipleKittens(5);
-      
       if(!userSettings.disableAnimations){
         kittenImg.classList.add('pulse');
         setTimeout(() => kittenImg.classList.remove('pulse'), 300);
       }
-    });
-  });
+    };
+    kittenImg.addEventListener('click', onClick, { passive: true });
+    kittenImg.addEventListener('touchstart', (e) => { e.preventDefault(); onClick(); }, { passive: false });
+  }
+
+  // Attach immediately if possible and also on DOM ready
+  attachKittenHandlers();
+  document.addEventListener('DOMContentLoaded', attachKittenHandlers);
   
   function addScore(amount) {
     kittens += amount;
@@ -2949,7 +2719,14 @@ achievementsData.push(
   
   setInterval(() => {
     let breedCPS = extraCPSBreed[selectedBreed] || 0;
-    const totalCPS = upgrades.autoClicker * 5 + upgrades.autoKittenFarm * 7 + upgrades.kittenPlanet * 30 + breedCPS;
+    const totalCPS = (
+      upgrades.autoClicker * 5 +
+      upgrades.autoKittenFarm * 7 +
+      upgrades.kittenPlanet * 30 +
+      upgrades.nebulaCursor * 15 +
+      upgrades.starForge * 120 +
+      breedCPS
+    );
     if (totalCPS > 0) { addScore(totalCPS); }
   }, 1000);
   
@@ -3334,11 +3111,16 @@ achievementsData.push(
   }
 
   // Add event listener to console input
-  document.getElementById('consoleInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      executeConsoleCommand();
+  (function(){
+    const ci = document.getElementById('consoleInput');
+    if (ci) {
+      ci.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          executeConsoleCommand();
+        }
+      });
     }
-  });
+  })();
 
   // Update player count periodically (fallback)
   setInterval(updatePlayerCount, 30000);
@@ -3372,8 +3154,7 @@ achievementsData.push(
       const saveString = btoa(JSON.stringify(saveData));
       localStorage.setItem('kittenSave', saveString);
       
-      // Also save to Firebase
-      saveUserData();
+      
     } catch (e) {}
   }, 5000);
 
