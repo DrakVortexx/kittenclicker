@@ -1858,7 +1858,7 @@ let achievementsData = [
     let christmasLabel = `<b>${breedNames.christmas_kitten}</b>`;
     
     // Add event tag for Christmas kitten
-    const isChristmas = (now.getMonth() === 11 && now.getDate() >= 3 && now.getDate() <= 31);
+    const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
     
     if (isChristmas) {
       christmasLabel += `<span class="breed-event-tag">EVENT</span>`;
@@ -1867,7 +1867,7 @@ let achievementsData = [
     // Lock logic for Christmas kitten
     if (!breedsUnlocked.christmas_kitten) {
       if (isChristmas) {
-        christmasLabel += `<span class="breed-lock">🔒 (10k clicks & 8 achievements required)</span>`;
+        christmasLabel += `<span class="breed-lock">🔒 (10k kittens & 8 achievements required)</span>`;
       } else {
         christmasLabel += `<span class="breed-lock">🔒 (Only available Dec 12-31)</span>`;
       }
@@ -2335,7 +2335,8 @@ let achievementsData = [
       const now = new Date();
       const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
       
-      if (isChristmas && manualClickCount >= 10000 && achievementCount >= 8) {
+      // Unlock based on kittens (score), not manual click count
+      if (isChristmas && kittens >= 10000 && achievementCount >= 8) {
         breedsUnlocked.christmas_kitten = true;
         showNotification("You unlocked the Christmas Kitten! It will remain unlocked.");
         achievementsChanged = true;
