@@ -1390,7 +1390,7 @@
 <!-- Footer with player count and version -->
 <div id="footer">
   <div>Players: <span id="currentPlayers">Loading...</span> | Total: <span id="totalPlayers">Loading...</span></div>
-  <div>Version: V1.41 | <a href="https://kittenclicker-89cs.onrender.com/fangdootle/about.html" target="_blank">About</a></div>
+  <div>Version: V1.41 | <a href="https://kittenclicker.vercel.app//fangdootle/about.html" target="_blank">About</a></div>
 </div>
 
 <!-- Progress Overlay -->
@@ -1565,6 +1565,7 @@ let extraCPSBreed = {
     cat_of_the_cosmos: 1000
 };
 let achievementsData = [
+    // Early game / tutorial
     { id: 'click1', text: 'CLICK: Click the kitten!', achieved: false, condition: () => kittens > 0 },
     { id: 'milkBowl1', text: 'You have to start somewhere: Buy your first Milk Bowl', achieved: false, condition: () => upgrades.milkBowl >= 1 },
     { id: 'score100', text: 'Kittens: 100 points', achieved: false, condition: () => kittens >= 100 },
@@ -1574,40 +1575,40 @@ let achievementsData = [
     { id: 'truepower', text: 'True Power: Select a new kitten breed!', achieved: false, condition: () => selectedBreed !== "American Shorthair" },
     { id: 'tenk', text: '10k: Get 10000 kittens!', achieved: false, condition: () => kittens >= 10000 },
     { id: 'mystery1', text: 'Take a chance: Try the Mystery Kitten!', achieved: false, condition: () => window.usedMysteryKitten },
-    { id: 'click100k', text: 'Dedicated Paw-sion: Reach 100,000 clicks!', achieved: false, condition: () => kittens >= 100000 },
-    { id: 'halloween_unlock', text: 'Spooky Surprise: Unlock the Halloween Cat!', achieved: false, condition: () => breedsUnlocked.halloween_cat },
-    { id: 'christmas_unlock', text: 'Holiday Cheer: Unlock the Christmas Kitten!', achieved: false, condition: () => breedsUnlocked.christmas_kitten },
-    { id: 'click500', text: 'Click Master: Reach 500 clicks', achieved: false, condition: () => kittens >= 500 },
-    { id: 'click5000', text: 'Click Expert: Reach 5000 clicks', achieved: false, condition: () => kittens >= 5000 },
-    { id: 'click25000', text: 'Click Pro: Reach 25000 clicks', achieved: false, condition: () => kittens >= 25000 },
-    { id: 'auto5', text: 'Auto Enthusiast: Buy 5 Auto-Mouses', achieved: false, condition: () => upgrades.autoClicker >= 5 },
+
+    // Score / grind based
+    { id: 'click100k', text: 'Dedicated Paw-sion: Reach 100,000 kittens!', achieved: false, condition: () => kittens >= 100000 },
+    { id: 'million_paw', text: 'Million Paw | 1,000,000 kittens', achieved: false, condition: () => kittens >= 1000000 },
+    { id: 'score1B', text: 'Kittens: 1B points', achieved: false, condition: () => kittens >= 1000000000 },
+
+    // Auto-click / CPS focused
     { id: 'auto10', text: 'Auto Fan: Buy 10 Auto-Mouses', achieved: false, condition: () => upgrades.autoClicker >= 10 },
     { id: 'auto20', text: 'Auto Master: Buy 20 Auto-Mouses', achieved: false, condition: () => upgrades.autoClicker >= 20 },
-    { id: 'score1B', text: 'Kittens: 1B points', achieved: false, condition: () => kittens >= 1000000000 },
-    { id: 'million_paw', text: 'Million Paw | 1,000,000 clicks', achieved: false, condition: () => kittens >= 1000000 },
-    { id: 'double_trouble', text: 'Double Trouble | Own 2 upgrades', achieved: false, condition: () => Object.values(upgrades).filter(u => u > 0).length >= 2 },
-    { id: 'shop_enthusiast', text: 'Shop Enthusiast | Buy 10 upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 10 },
-    { id: 'toy_collector', text: 'Toy Collector | Buy 25 upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 25 },
-    { id: 'fancy_feline', text: 'Fancy Feline | Buy 50 upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 50 },
-    { id: 'luxury_cat', text: 'Luxury Cat | Buy 100 upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 100 },
-    { id: 'prestige_beginner', text: 'Prestige Beginner | Prestige once', achieved: false, condition: () => prestigeLevel >= 1 },
-    { id: 'prestige_expert', text: 'Prestige Expert | Prestige 10 times', achieved: false, condition: () => prestigeLevel >= 10 },
-    { id: 'achievement_hunter', text: 'Achievement Hunter | Unlock 10 achievements', achieved: false, condition: () => achievementsData.filter(a => a.achieved).length >= 10 },
+    { id: 'cps50', text: 'Rain of Paws | Reach 50 CPS', achieved: false, condition: () => (upgrades.autoClicker * 5 + upgrades.autoKittenFarm * 7 + upgrades.kittenPlanet * 30 + (extraCPSBreed[selectedBreed] || 0)) >= 50 },
+    { id: 'cps500', text: 'Storm of Paws | Reach 500 CPS', achieved: false, condition: () => (upgrades.autoClicker * 5 + upgrades.autoKittenFarm * 7 + upgrades.kittenPlanet * 30 + (extraCPSBreed[selectedBreed] || 0)) >= 500 },
+
+    // Shop / upgrades
+    { id: 'double_trouble', text: 'Double Trouble | Own 2 different upgrades', achieved: false, condition: () => Object.values(upgrades).filter(u => u > 0).length >= 2 },
+    { id: 'shop_enthusiast', text: 'Shop Enthusiast | Buy 10 total upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 10 },
+    { id: 'luxury_cat', text: 'Luxury Cat | Buy 100 total upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 100 },
+
+    // Breeds / collection
+    { id: 'halloween_unlock', text: 'Spooky Surprise: Unlock the Halloween Cat!', achieved: false, condition: () => breedsUnlocked.halloween_cat },
+    { id: 'christmas_unlock', text: 'Holiday Cheer: Unlock the Christmas Kitten!', achieved: false, condition: () => breedsUnlocked.christmas_kitten },
     { id: 'kitten_collector', text: 'Kitten Collector | Unlock 5 kittens', achieved: false, condition: () => Object.values(breedsUnlocked).filter(b => b).length >= 5 },
     { id: 'breeder_supreme', text: 'Breeder Supreme | Unlock 10 kittens', achieved: false, condition: () => Object.values(breedsUnlocked).filter(b => b).length >= 10 },
-    { id: 'click_multiplier', text: 'Click Multiplier | Reach 10x click multiplier', achieved: false, condition: () => clickValue >= 10 },
-    { id: 'toy_master', text: 'Toy Master | Buy 5 of the same upgrade', achieved: false, condition: () => Object.values(upgrades).some(u => u >= 5) },
-    { id: 'rich_kitty', text: 'Rich Kitty | Reach 100,000 coins', achieved: false, condition: () => kittens >= 100000 },
-    { id: 'auto_clicker', text: 'Auto Clicker | Buy first auto-click upgrade', achieved: false, condition: () => upgrades.autoClicker >= 1 },
-    { id: 'auto_click_master', text: 'Auto Click Master | Buy 10 auto-click upgrades', achieved: false, condition: () => upgrades.autoClicker >= 10 },
-    { id: 'upgrade_hoarder', text: 'Upgrade Hoarder | Own 25 upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 25 },
-    { id: 'upgrade_collector', text: 'Upgrade Collector | Own 50 upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 50 },
-    { id: 'kitten_army', text: 'Kitten Army | Own 10 kittens', achieved: false, condition: () => Object.values(breedsUnlocked).filter(b => b).length >= 10 },
-    { id: 'cat_family', text: 'Cat Family | Own 25 kittens', achieved: false, condition: () => Object.values(breedsUnlocked).filter(b => b).length >= 25 },
-    { id: 'beginner_buyer', text: 'Beginner Buyer | Buy 5 upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 5 },
-    { id: 'dedicated_buyer', text: 'Dedicated Buyer | Buy 25 upgrades', achieved: false, condition: () => Object.values(upgrades).reduce((a, b) => a + b, 0) >= 25 },
+
+    // Prestige & long-term grind
+    { id: 'prestige_beginner', text: 'Prestige Beginner | Prestige once', achieved: false, condition: () => prestigeLevel >= 1 },
+    { id: 'prestige_expert', text: 'Prestige Expert | Prestige 10 times', achieved: false, condition: () => prestigeLevel >= 10 },
+    { id: 'prestige_legend', text: 'Prestige Legend | Prestige 25 times', achieved: false, condition: () => prestigeLevel >= 25 },
+
+    // Meta-achievements
+    { id: 'achievement_hunter', text: 'Achievement Hunter | Unlock 10 achievements', achieved: false, condition: () => achievementsData.filter(a => a.achieved).length >= 10 },
     { id: 'true_purrfection', text: 'True Purrfection | Unlock 50 achievements (action-based only) and give full achievements section', achieved: false, condition: () => achievementsData.filter(a => a.achieved).length >= 50 },
-    { id: 'reviewer', text: 'Reviewer | Leave your first review', achieved: false, condition: () => window.userHasReviewed },
+
+    // Special / rare
+    { id: 'rich_kitty', text: 'Rich Kitty | Reach 100,000 kittens in a single run', achieved: false, condition: () => kittens >= 100000 },
     { id: 'cosmos_unlock', text: 'Cosmic Explorer: Unlock the Cat of the Cosmos!', achieved: false, condition: () => breedsUnlocked.cat_of_the_cosmos }
 ];
   window.usedMysteryKitten = false;
