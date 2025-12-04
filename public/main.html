@@ -195,7 +195,7 @@
 
   /* Shop overlay */
   #shopOverlay {
-    display: flex;
+    /* display controlled by openOverlay; when open, we set to flex */
     flex-direction: column;
     padding: 60px 20px 20px;
   }
@@ -1921,7 +1921,12 @@ achievementsData.push(
   // Function to open overlays
   function openOverlay(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = 'block';
+    if (!el) return;
+    if (id === 'shopOverlay') {
+      el.style.display = 'flex';
+    } else {
+      el.style.display = 'block';
+    }
     if(id === 'achievementsOverlay') renderAchievements();
     if(id === 'breedsOverlay') { renderBreeds(); renderFusionUI && renderFusionUI(); }
     if(id === 'settingsOverlay') updateSettingsUI();
