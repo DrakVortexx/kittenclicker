@@ -1269,17 +1269,17 @@
       </div>
     </div>
     <div id="offlineContent" class="shop-tab-content">
-      <div class="shop-item" onclick="buyOfflineClick()"><div class="shop-item-content"><strong class="item-text">Offline Clicks</strong><br /><span class="item-text"> +1 offline click/sec</span><br />
-        <button id="offlineClickBtn">Buy for <span class="item-cost" id="offlineClickCost">1000</span></button>
-        <div class="upgrade-count" id="offlineClickCount">0</div>
+      <div class="shop-item" onclick="buyOfflineEfficiency()"><div class="shop-item-content"><strong class="item-text">Efficiency Training</strong><br /><span class="item-text"> +3% offline bonus</span><br />
+        <button id="offlineEfficiencyBtn">Buy for <span class="item-cost" id="offlineEfficiencyCost">250000</span></button>
+        <div class="upgrade-count" id="offlineEfficiencyCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyOfflineBoost()"><div class="shop-item-content"><strong class="item-text">Offline Boost</strong><br /><span class="item-text"> +50% offline bonus</span><br />
-        <button id="offlineBoostBtn">Buy for <span class="item-cost" id="offlineBoostCost">5000</span></button>
-        <div class="upgrade-count" id="offlineBoostCount">0</div>
+      <div class="shop-item" onclick="buyOfflineHibernate()"><div class="shop-item-content"><strong class="item-text">Hibernate Mode</strong><br /><span class="item-text"> +0.2 offline click/sec</span><br />
+        <button id="offlineHibernateBtn">Buy for <span class="item-cost" id="offlineHibernateCost">500000</span></button>
+        <div class="upgrade-count" id="offlineHibernateCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyOfflineEmpire()"><div class="shop-item-content"><strong class="item-text">Offline Empire</strong><br /><span class="item-text"> +100% offline bonus</span><br />
-        <button id="offlineEmpireBtn">Buy for <span class="item-cost" id="offlineEmpireCost">25000</span></button>
-        <div class="upgrade-count" id="offlineEmpireCount">0</div>
+      <div class="shop-item" onclick="buyOfflineTimeCapsule()"><div class="shop-item-content"><strong class="item-text">Time Capsule</strong><br /><span class="item-text"> +10% offline bonus</span><br />
+        <button id="offlineTimeCapsuleBtn">Buy for <span class="item-cost" id="offlineTimeCapsuleCost">1000000</span></button>
+        <div class="upgrade-count" id="offlineTimeCapsuleCount">0</div>
       </div></div>
     </div>
     <div id="bundlesContent" class="shop-tab-content">
@@ -1591,6 +1591,12 @@ achievementsData.push(
   let goldenBoostCPS = 0;
   let goldenBoostTimer = null;
 
+  let offlineEfficiency = 0;
+  let offlineEfficiencyCost = 250000;
+  let offlineHibernate = 0;
+  let offlineHibernateCost = 500000;
+  let offlineTimeCapsule = 0;
+  let offlineTimeCapsuleCost = 1000000;
   
 
   // --- SETTINGS LOGIC ---
@@ -2597,9 +2603,9 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorCost')) document.getElementById('nebulaCursorCost').textContent = upgradeCosts.nebulaCursor;
     if(document.getElementById('starForgeCost')) document.getElementById('starForgeCost').textContent = upgradeCosts.starForge;
     
-    if(document.getElementById('offlineClickCost')) document.getElementById('offlineClickCost').textContent = offlineClickCost;
-    if(document.getElementById('offlineBoostCost')) document.getElementById('offlineBoostCost').textContent = offlineBoostCost;
-    if(document.getElementById('offlineEmpireCost')) document.getElementById('offlineEmpireCost').textContent = offlineEmpireCost;
+    if(document.getElementById('offlineEfficiencyCost')) document.getElementById('offlineEfficiencyCost').textContent = offlineEfficiencyCost;
+    if(document.getElementById('offlineHibernateCost')) document.getElementById('offlineHibernateCost').textContent = offlineHibernateCost;
+    if(document.getElementById('offlineTimeCapsuleCost')) document.getElementById('offlineTimeCapsuleCost').textContent = offlineTimeCapsuleCost;
     
     // Update button states for regular and auto upgrades
     if(document.getElementById('milkBowlBtn')) document.getElementById('milkBowlBtn').disabled = kittens < upgradeCosts.milkBowl;
@@ -2615,9 +2621,9 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorBtn')) document.getElementById('nebulaCursorBtn').disabled = kittens < upgradeCosts.nebulaCursor;
     if(document.getElementById('starForgeBtn')) document.getElementById('starForgeBtn').disabled = kittens < upgradeCosts.starForge;
 
-    if(document.getElementById('offlineClickBtn')) document.getElementById('offlineClickBtn').disabled = kittens < offlineClickCost;
-    if(document.getElementById('offlineBoostBtn')) document.getElementById('offlineBoostBtn').disabled = kittens < offlineBoostCost;
-    if(document.getElementById('offlineEmpireBtn')) document.getElementById('offlineEmpireBtn').disabled = kittens < offlineEmpireCost;
+    if(document.getElementById('offlineEfficiencyBtn')) document.getElementById('offlineEfficiencyBtn').disabled = kittens < offlineEfficiencyCost;
+    if(document.getElementById('offlineHibernateBtn')) document.getElementById('offlineHibernateBtn').disabled = kittens < offlineHibernateCost;
+    if(document.getElementById('offlineTimeCapsuleBtn')) document.getElementById('offlineTimeCapsuleBtn').disabled = kittens < offlineTimeCapsuleCost;
 
     // Update bonus upgrade costs and counts (one-time purchase logic)
     const bonusUpgradeNames = ['speedBoost', 'doublePoints', 'goldenPaws'];
@@ -2657,9 +2663,9 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorCount')) document.getElementById('nebulaCursorCount').textContent = upgrades.nebulaCursor;
     if(document.getElementById('starForgeCount')) document.getElementById('starForgeCount').textContent = upgrades.starForge;
     
-    if(document.getElementById('offlineClickCount')) document.getElementById('offlineClickCount').textContent = offlineClicks;
-    if(document.getElementById('offlineBoostCount')) document.getElementById('offlineBoostCount').textContent = offlineBoost;
-    if(document.getElementById('offlineEmpireCount')) document.getElementById('offlineEmpireCount').textContent = offlineEmpire;
+    if(document.getElementById('offlineEfficiencyCount')) document.getElementById('offlineEfficiencyCount').textContent = offlineEfficiency;
+    if(document.getElementById('offlineHibernateCount')) document.getElementById('offlineHibernateCount').textContent = offlineHibernate;
+    if(document.getElementById('offlineTimeCapsuleCount')) document.getElementById('offlineTimeCapsuleCount').textContent = offlineTimeCapsule;
     
     // Update prestige button state
     const requirement = Math.pow(10, 6 + prestigeLevel);
@@ -2765,11 +2771,11 @@ achievementsData.push(
         upgrades.nebulaCursor * 15 +
         upgrades.starForge * 120 +
         breedCPS + gb
-      ) + offlineClicks;
+      ) + offlineClicks + (offlineHibernate * 0.2);
     })();
     
     // Apply boosts
-    let boostMultiplier = 1 + (offlineBoost * 0.5) + (offlineEmpire * 0.5);
+    let boostMultiplier = 1 + (offlineBoost * 0.5) + (offlineEmpire * 0.5) + (offlineEfficiency * 0.03) + (offlineTimeCapsule * 0.10);
     
     // Calculate total offline bonus
     const offlineBonus = baseClicksPerSecond * offlineTime * boostMultiplier;
@@ -2813,6 +2819,30 @@ achievementsData.push(
       kittens -= offlineEmpireCost;
       offlineEmpire++;
       offlineEmpireCost = Math.ceil(offlineEmpireCost * 1.5);
+      updateUI();
+    }
+  }
+  function buyOfflineEfficiency() {
+    if (kittens >= offlineEfficiencyCost) {
+      kittens -= offlineEfficiencyCost;
+      offlineEfficiency++;
+      offlineEfficiencyCost = Math.ceil(offlineEfficiencyCost * 1.7);
+      updateUI();
+    }
+  }
+  function buyOfflineHibernate() {
+    if (kittens >= offlineHibernateCost) {
+      kittens -= offlineHibernateCost;
+      offlineHibernate++;
+      offlineHibernateCost = Math.ceil(offlineHibernateCost * 1.7);
+      updateUI();
+    }
+  }
+  function buyOfflineTimeCapsule() {
+    if (kittens >= offlineTimeCapsuleCost) {
+      kittens -= offlineTimeCapsuleCost;
+      offlineTimeCapsule++;
+      offlineTimeCapsuleCost = Math.ceil(offlineTimeCapsuleCost * 1.8);
       updateUI();
     }
   }
@@ -2919,7 +2949,7 @@ achievementsData.push(
   };
   
   function exportSave() {
-    const saveData = { kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, lastSeenTime };
+    const saveData = { kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, offlineEfficiency, offlineEfficiencyCost, offlineHibernate, offlineHibernateCost, offlineTimeCapsule, offlineTimeCapsuleCost, lastSeenTime };
     const saveString = btoa(JSON.stringify(saveData));
     const textarea = document.getElementById('saveCodeBox');
     textarea.value = saveString;
@@ -2955,6 +2985,12 @@ achievementsData.push(
       if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
       if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
       if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
+      if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
+      if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
+      if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
+      if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
+      if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
+      if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
       if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
       updateUI();
       renderAchievements();
@@ -3009,6 +3045,12 @@ achievementsData.push(
       offlineBoostCost = 5000;
       offlineEmpire = 0;
       offlineEmpireCost = 25000;
+      offlineEfficiency = 0;
+      offlineEfficiencyCost = 250000;
+      offlineHibernate = 0;
+      offlineHibernateCost = 500000;
+      offlineTimeCapsule = 0;
+      offlineTimeCapsuleCost = 1000000;
       lastSeenTime = 0;
       userSettings = {theme:"pink", floatScore:true, notifVolume:1, disableAnimations:false};
       applyTheme(userSettings.theme);
@@ -3062,6 +3104,12 @@ achievementsData.push(
         if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
         if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
         if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
+        if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
+        if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
+        if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
+        if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
+        if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
+        if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
         if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
       }
     } catch (e) {}
@@ -3267,6 +3315,12 @@ achievementsData.push(
         offlineBoostCost, 
         offlineEmpire, 
         offlineEmpireCost, 
+        offlineEfficiency,
+        offlineEfficiencyCost,
+        offlineHibernate,
+        offlineHibernateCost,
+        offlineTimeCapsule,
+        offlineTimeCapsuleCost,
         lastSeenTime 
       };
       const saveString = btoa(JSON.stringify(saveData));
