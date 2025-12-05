@@ -2967,7 +2967,7 @@ achievementsData.push(
   
   function exportSave() {
     const saveData = { kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, offlineEfficiency, offlineEfficiencyCost, offlineHibernate, offlineHibernateCost, offlineTimeCapsule, offlineTimeCapsuleCost, lastSeenTime };
-    const saveString = btoa(JSON.stringify(saveData));
+    const saveString = JSON.stringify(saveData);
     const textarea = document.getElementById('saveCodeBox');
     textarea.value = saveString;
     textarea.select();
@@ -2976,7 +2976,9 @@ achievementsData.push(
   function loadSave() {
     const input = document.getElementById('loadSaveCode').value;
     try {
-      const data = JSON.parse(atob(input));
+      let data;
+      try { data = JSON.parse(input); }
+      catch(_) { data = JSON.parse(atob(input)); }
       kittens = data.kittens || 0;
       clickValue = data.clickValue || 1;
       upgrades = data.upgrades || upgrades;
@@ -3096,38 +3098,45 @@ achievementsData.push(
     try {
       const saved = localStorage.getItem('kittenSave');
       if (saved) {
-        const data = JSON.parse(atob(saved));
-        kittens = data.kittens || 0;
-        clickValue = data.clickValue || 1;
-        upgrades = data.upgrades || upgrades;
-        upgradeCosts = data.upgradeCosts || upgradeCosts;
-        selectedBreed = data.selectedBreed || "american_shorthair";
-        breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
-        if (Array.isArray(data.achievementsData)) {
-          for (let ach of data.achievementsData) {
-            const found = achievementsData.find(a => a.id === ach.id);
-            if (found) found.achieved = ach.achieved;
+        let data = null;
+        try {
+          data = JSON.parse(saved);
+        } catch(_) {
+          try { data = JSON.parse(atob(saved)); } catch(_) {}
+        }
+        if (data) {
+          kittens = data.kittens || 0;
+          clickValue = data.clickValue || 1;
+          upgrades = data.upgrades || upgrades;
+          upgradeCosts = data.upgradeCosts || upgradeCosts;
+          selectedBreed = data.selectedBreed || "american_shorthair";
+          breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
+          if (Array.isArray(data.achievementsData)) {
+            for (let ach of data.achievementsData) {
+              const found = achievementsData.find(a => a.id === ach.id);
+              if (found) found.achieved = ach.achieved;
+            }
           }
+          if (data.userSettings) {
+            userSettings = data.userSettings;
+          }
+          if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
+          if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
+          if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
+          if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
+          if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
+          if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
+          if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
+          if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
+          if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
+          if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
+          if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
+          if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
+          if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
+          if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
+          if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
+          if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
         }
-        if (data.userSettings) {
-          userSettings = data.userSettings;
-        }
-        if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
-        if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
-        if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
-        if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
-        if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
-        if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
-        if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
-        if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
-        if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
-        if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
-        if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
-        if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
-        if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
-        if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
-        if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
-        if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
       }
     } catch (e) {}
     try {
@@ -3341,8 +3350,7 @@ achievementsData.push(
         offlineTimeCapsuleCost,
         lastSeenTime
       };
-      const saveString = btoa(JSON.stringify(saveData));
-      localStorage.setItem('kittenSave', saveString);
+      localStorage.setItem('kittenSave', JSON.stringify(saveData));
     } catch (e) {}
   }
 
