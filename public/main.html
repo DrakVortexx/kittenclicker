@@ -2459,6 +2459,7 @@ achievementsData.push(
     }
     const final = Math.floor(baseValue * streakMult * critMult);
     addScore(final);
+    saveProgress();
     if (critMult > 1 && userSettings.floatScore) {
       showFloatingScore(final);
     }
@@ -2510,6 +2511,7 @@ achievementsData.push(
       showFloatingScore(amount);
     updateUI();
     checkAchievements();
+    saveProgress();
   }
   
   function showFloatingScore(amount) {
@@ -3171,6 +3173,7 @@ achievementsData.push(
     
     // Update last seen time
     lastSeenTime = Date.now();
+    saveProgress();
   });
   
   // Save to userlist every 5 seconds
