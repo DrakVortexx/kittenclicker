@@ -1365,7 +1365,7 @@ function getTrackingId() {
 // Game state variables (existing code remains unchanged)
 let kittens = 0, clickValue = 1;
 let upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0,nebulaCursor:0,starForge:0};
-let upgradeCosts = {milkBowl:15,catFood:50,scratcher:200,kittenFactory:1000,cityOfKittens:5000,worldOfMeows:25000,autoClicker:100,autoKittenFarm:500,kittenPlanet:10000,goldKitty:500000,nebulaCursor:250000,starForge:1000000};
+let upgradeCosts = {milkBowl:50,catFood:200,scratcher:800,kittenFactory:5000,cityOfKittens:25000,worldOfMeows:100000,autoClicker:500,autoKittenFarm:2500,kittenPlanet:1000000,goldKitty:2000000,nebulaCursor:750000,starForge:5000000};
 let selectedBreed = "american_shorthair";
 let breedsUnlocked = { 
     american_shorthair: true, 
@@ -1618,23 +1618,23 @@ achievementsData.push(
       // Lock logic
       if (!breedsUnlocked[breed]) {
         if (breed === "maine_coon") {
-          label += `<span class="breed-lock">🔒 (2 achievements required)</span>`;
-        } else if (breed === "siamese") {
           label += `<span class="breed-lock">🔒 (5 achievements required)</span>`;
-        } else if (breed === "himalayan") {
-          label += `<span class="breed-lock">🔒 (8 achievements required)</span>`;
-        } else if (breed === "ragdoll") {
+        } else if (breed === "siamese") {
           label += `<span class="breed-lock">🔒 (10 achievements required)</span>`;
+        } else if (breed === "himalayan") {
+          label += `<span class="breed-lock">🔒 (15 achievements required)</span>`;
+        } else if (breed === "ragdoll") {
+          label += `<span class="breed-lock">🔒 (20 achievements required)</span>`;
         } else if (breed === "persian") {
-          label += `<span class="breed-lock">🔒 (12 achievements required)</span>`;
+          label += `<span class="breed-lock">🔒 (25 achievements required)</span>`;
         } else if (breed === "bengal") {
-          label += `<span class="breed-lock">🔒 (15 achievements required)</span>`;
+          label += `<span class="breed-lock">🔒 (30 achievements required)</span>`;
         } else if (breed === "calico") {
-          label += `<span class="breed-lock">🔒 (Reach 500k kittens)</span>`;
+          label += `<span class="breed-lock">🔒 (Reach 2M kittens)</span>`;
         } else if (breed === "sphynx") {
-          label += `<span class="breed-lock">🔒 (Reach 1M kittens)</span>`;
+          label += `<span class="breed-lock">🔒 (Reach 5M kittens)</span>`;
         } else if (breed === "cat_of_the_cosmos") {
-          label += `<span class="breed-lock">🔒 (15 achievements required)</span>`;
+          label += `<span class="breed-lock">🔒 (25 achievements required)</span>`;
         }
       }
 
@@ -1737,7 +1737,7 @@ achievementsData.push(
     // Lock logic for Christmas kitten
     if (!breedsUnlocked.christmas_kitten) {
       if (isChristmas) {
-        christmasLabel += `<span class="breed-lock">🔒 (10k kittens & 8 achievements required)</span>`;
+        christmasLabel += `<span class="breed-lock">🔒 (100k kittens & 12 achievements required)</span>`;
       } else {
         christmasLabel += `<span class="breed-lock">🔒 (Only available Dec 12-31)</span>`;
       }
@@ -1952,14 +1952,26 @@ achievementsData.push(
   function initApp() {
     try {
       resetOverlays();
+      ensureKittenImg && ensureKittenImg();
       attachKittenHandlers();
+      const noProgress = kittens === 0 && Object.values(upgrades).every(v => v === 0) && prestigeLevel === 0;
+      if (noProgress) {
+        clickValue = 1;
+      }
       updateUI();
       renderDynamicShop();
       renderBundles();
       updatePrestigeInfo();
-      startHeartbeat();
-      startPlayerCountStream();
-      updatePlayerCount();
+      if (location.protocol !== 'file:') {
+        startHeartbeat();
+        startPlayerCountStream();
+        updatePlayerCount();
+      } else {
+        const cp = document.getElementById('currentPlayers');
+        const tp = document.getElementById('totalPlayers');
+        if (cp) cp.textContent = 'Offline';
+        if (tp) tp.textContent = 'Offline';
+      }
     } catch (e) {
       console.error('Initialization error:', e);
     }
@@ -2276,12 +2288,12 @@ achievementsData.push(
     
     // Check breed unlocks after checking all achievements
     const breedUnlocks = [
-      { breed: "maine_coon", requiredAchievements: 2, message: "You unlocked the Maine Coon breed!" },
-      { breed: "siamese", requiredAchievements: 5, message: "You unlocked the Siamese breed!" },
-      { breed: "himalayan", requiredAchievements: 8, message: "You unlocked the Himalayan breed!" },
-      { breed: "ragdoll", requiredAchievements: 10, message: "You unlocked the Ragdoll breed!" },
-      { breed: "persian", requiredAchievements: 12, message: "You unlocked the Persian breed!" },
-      { breed: "bengal", requiredAchievements: 15, message: "You unlocked the Bengal breed!" }
+      { breed: "maine_coon", requiredAchievements: 5, message: "You unlocked the Maine Coon breed!" },
+      { breed: "siamese", requiredAchievements: 10, message: "You unlocked the Siamese breed!" },
+      { breed: "himalayan", requiredAchievements: 15, message: "You unlocked the Himalayan breed!" },
+      { breed: "ragdoll", requiredAchievements: 20, message: "You unlocked the Ragdoll breed!" },
+      { breed: "persian", requiredAchievements: 25, message: "You unlocked the Persian breed!" },
+      { breed: "bengal", requiredAchievements: 30, message: "You unlocked the Bengal breed!" }
     ];
 
     for (const unlock of breedUnlocks) {
@@ -2296,7 +2308,7 @@ achievementsData.push(
     // Check if we can unlock Halloween cat
     if (!breedsUnlocked.halloween_cat) {
       const achievementCount = achievementsData.filter(a => a.achieved).length;
-      if (achievementCount >= 10 && kittens >= 50000) {
+      if (achievementCount >= 20 && kittens >= 200000) {
         // Unlock Halloween cat if it's Halloween season
         const now = new Date();
         const isHalloween = (now.getMonth() === 9 && now.getDate() >= 20 && now.getDate() <= 31) || 
@@ -2317,7 +2329,7 @@ achievementsData.push(
       const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
       
       // Unlock based on kittens (score), not manual click count
-      if (isChristmas && kittens >= 10000 && achievementCount >= 8) {
+      if (isChristmas && kittens >= 100000 && achievementCount >= 12) {
         breedsUnlocked.christmas_kitten = true;
         showNotification("You unlocked the Christmas Kitten! It will remain unlocked.");
         achievementsChanged = true;
@@ -2327,20 +2339,20 @@ achievementsData.push(
     // Check for Cat of the Cosmos unlock
     if (!breedsUnlocked.cat_of_the_cosmos) {
       const achievementCount = achievementsData.filter(a => a.achieved).length;
-      if (achievementCount >= 15) {
+      if (achievementCount >= 25) {
         breedsUnlocked.cat_of_the_cosmos = true;
         showNotification("You unlocked the Cat of the Cosmos! It will remain unlocked.");
         achievementsChanged = true;
       }
     }
 
-    if (!breedsUnlocked.calico && kittens >= 500000) {
+    if (!breedsUnlocked.calico && kittens >= 2000000) {
       breedsUnlocked.calico = true;
       showNotification("You unlocked the Calico breed!");
       achievementsChanged = true;
     }
 
-    if (!breedsUnlocked.sphynx && kittens >= 1000000) {
+    if (!breedsUnlocked.sphynx && kittens >= 5000000) {
       breedsUnlocked.sphynx = true;
       showNotification("You unlocked the Sphynx breed!");
       achievementsChanged = true;
@@ -2591,7 +2603,7 @@ achievementsData.push(
       kittens -= upgradeCosts[name];
       clickValue += increment;
       upgrades[name]++;
-      upgradeCosts[name] = Math.ceil(upgradeCosts[name] * 1.15);
+      upgradeCosts[name] = Math.ceil(upgradeCosts[name] * 1.3);
       updateUI();
     }
   }
@@ -2600,7 +2612,7 @@ achievementsData.push(
     if (kittens >= upgradeCosts.autoClicker) {
       kittens -= upgradeCosts.autoClicker;
       upgrades.autoClicker++;
-      upgradeCosts.autoClicker = Math.ceil(upgradeCosts.autoClicker * 1.15);
+      upgradeCosts.autoClicker = Math.ceil(upgradeCosts.autoClicker * 1.3);
       updateUI();
     }
   }
@@ -2609,7 +2621,7 @@ achievementsData.push(
     if (kittens >= upgradeCosts.autoKittenFarm) {
       kittens -= upgradeCosts.autoKittenFarm;
       upgrades.autoKittenFarm++;
-      upgradeCosts.autoKittenFarm = Math.ceil(upgradeCosts.autoKittenFarm * 1.15);
+      upgradeCosts.autoKittenFarm = Math.ceil(upgradeCosts.autoKittenFarm * 1.3);
       updateUI();
     }
   }
@@ -2618,7 +2630,7 @@ achievementsData.push(
     if (kittens >= upgradeCosts.kittenPlanet) {
       kittens -= upgradeCosts.kittenPlanet;
       upgrades.kittenPlanet++;
-      upgradeCosts.kittenPlanet = Math.ceil(upgradeCosts.kittenPlanet * 1.15);
+      upgradeCosts.kittenPlanet = Math.ceil(upgradeCosts.kittenPlanet * 1.3);
       updateUI();
     }
   }
@@ -2627,7 +2639,7 @@ achievementsData.push(
     if (kittens >= upgradeCosts.nebulaCursor) {
       kittens -= upgradeCosts.nebulaCursor;
       upgrades.nebulaCursor++;
-      upgradeCosts.nebulaCursor = Math.ceil(upgradeCosts.nebulaCursor * 1.15);
+      upgradeCosts.nebulaCursor = Math.ceil(upgradeCosts.nebulaCursor * 1.3);
       updateUI();
     }
   }
@@ -2636,7 +2648,7 @@ achievementsData.push(
     if (kittens >= upgradeCosts.starForge) {
       kittens -= upgradeCosts.starForge;
       upgrades.starForge++;
-      upgradeCosts.starForge = Math.ceil(upgradeCosts.starForge * 1.15);
+      upgradeCosts.starForge = Math.ceil(upgradeCosts.starForge * 1.3);
       updateUI();
     }
   }
@@ -2765,8 +2777,8 @@ achievementsData.push(
         }
         
         const achievementCount = achievementsData.filter(a => a.achieved).length;
-        if (kittens < 50000 || achievementCount < 10) {
-          showNotification("You need 50,000 kittens and 10 achievements to unlock the Halloween Cat!");
+        if (kittens < 200000 || achievementCount < 20) {
+          showNotification("You need 200,000 kittens and 20 achievements to unlock the Halloween Cat!");
           return;
         }
         
@@ -2895,7 +2907,7 @@ achievementsData.push(
     if(confirm('Are you sure you want to reset all progress?')) {
       kittens = 0; clickValue = 1;
       upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0,nebulaCursor:0,starForge:0};
-      upgradeCosts = {milkBowl:15,catFood:50,scratcher:200,kittenFactory:1000,cityOfKittens:5000,worldOfMeows:25000,autoClicker:100,autoKittenFarm:500,kittenPlanet:10000,goldKitty:500000,nebulaCursor:250000,starForge:1000000};
+      upgradeCosts = {milkBowl:50,catFood:200,scratcher:800,kittenFactory:5000,cityOfKittens:25000,worldOfMeows:100000,autoClicker:500,autoKittenFarm:2500,kittenPlanet:1000000,goldKitty:2000000,nebulaCursor:750000,starForge:5000000};
       selectedBreed = "american_shorthair";
       breedsUnlocked = { american_shorthair: true, maine_coon: false, siamese: false, himalayan: false, halloween_cat: false, christmas_kitten: false, cat_of_the_cosmos: false, ragdoll: false, persian: false, bengal: false, calico: false, sphynx: false, cosmic_maine: false, mythic_chimera: false, wild_ragdoll: false };
       for(let a of achievementsData) a.achieved = false;
