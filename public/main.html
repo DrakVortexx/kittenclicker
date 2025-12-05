@@ -3098,46 +3098,46 @@ achievementsData.push(
   // --- SAVE/LOAD ON PAGE LOAD ---
   window.addEventListener('load', () => {
     try {
-      let loaded = loadFromCookies();
-      if (!loaded) {
-        const saved = localStorage.getItem('kittenSave');
-        if (saved) {
-          let data = null;
-          try { data = JSON.parse(saved); }
-          catch(_) { try { data = JSON.parse(atob(saved)); } catch(_) {} }
-          if (data) {
-            kittens = data.kittens || 0;
-            clickValue = data.clickValue || 1;
-            upgrades = data.upgrades || upgrades;
-            upgradeCosts = data.upgradeCosts || upgradeCosts;
-            selectedBreed = data.selectedBreed || "american_shorthair";
-            breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
-            if (Array.isArray(data.achievementsData)) {
-              for (let ach of data.achievementsData) {
-                const found = achievementsData.find(a => a.id === ach.id);
-                if (found) found.achieved = ach.achieved;
-              }
+      const saved = localStorage.getItem('kittenSave');
+      if (saved) {
+        let data = null;
+        try {
+          data = JSON.parse(saved);
+        } catch(_) {
+          try { data = JSON.parse(atob(saved)); } catch(_) {}
+        }
+        if (data) {
+          kittens = data.kittens || 0;
+          clickValue = data.clickValue || 1;
+          upgrades = data.upgrades || upgrades;
+          upgradeCosts = data.upgradeCosts || upgradeCosts;
+          selectedBreed = data.selectedBreed || "american_shorthair";
+          breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
+          if (Array.isArray(data.achievementsData)) {
+            for (let ach of data.achievementsData) {
+              const found = achievementsData.find(a => a.id === ach.id);
+              if (found) found.achieved = ach.achieved;
             }
-            if (data.userSettings) {
-              userSettings = data.userSettings;
-            }
-            if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
-            if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
-            if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
-            if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
-            if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
-            if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
-            if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
-            if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
-            if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
-            if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
-            if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
-            if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
-            if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
-            if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
-            if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
-            if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
           }
+          if (data.userSettings) {
+            userSettings = data.userSettings;
+          }
+          if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
+          if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
+          if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
+          if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
+          if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
+          if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
+          if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
+          if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
+          if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
+          if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
+          if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
+          if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
+          if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
+          if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
+          if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
+          if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
         }
       }
     } catch (e) {}
@@ -3324,89 +3324,6 @@ achievementsData.push(
   // --- SHOP OPENING LOGIC ---
   // Shop is now opened via openOverlay() function like other overlays
 
-  function setCookie(name, value, days) {
-    const expires = new Date(Date.now() + days * 86400000).toUTCString();
-    let attrs = 'path=/; SameSite=Lax';
-    if (location.protocol === 'https:') attrs += '; Secure';
-    document.cookie = name + '=' + value + '; expires=' + expires + '; ' + attrs;
-  }
-
-  function getCookie(name) {
-    const m = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[-.\\[\\]{}()*+?^$|]/g, '\\$&') + '=([^;]*)'));
-    return m ? m[1] : null;
-  }
-
-  function saveCookies() {
-    try {
-      setCookie('kc_kittens', String(kittens), 365);
-      setCookie('kc_clickValue', String(clickValue), 365);
-      setCookie('kc_upgrades', encodeURIComponent(JSON.stringify(upgrades)), 365);
-      setCookie('kc_upgradeCosts', encodeURIComponent(JSON.stringify(upgradeCosts)), 365);
-      setCookie('kc_selectedBreed', selectedBreed, 365);
-      setCookie('kc_breedsUnlocked', encodeURIComponent(JSON.stringify(breedsUnlocked)), 365);
-      setCookie('kc_achievementsData', encodeURIComponent(JSON.stringify(achievementsData.map(a => ({ id: a.id, achieved: a.achieved })))), 365);
-      setCookie('kc_userSettings', encodeURIComponent(JSON.stringify(userSettings)), 365);
-      setCookie('kc_bonusUpgrades', encodeURIComponent(JSON.stringify(bonusUpgrades)), 365);
-      setCookie('kc_bonusUpgradeCosts', encodeURIComponent(JSON.stringify(bonusUpgradeCosts)), 365);
-      setCookie('kc_prestigeLevel', String(prestigeLevel), 365);
-      setCookie('kc_offline', encodeURIComponent(JSON.stringify({ offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, offlineEfficiency, offlineEfficiencyCost, offlineHibernate, offlineHibernateCost, offlineTimeCapsule, offlineTimeCapsuleCost, lastSeenTime })), 365);
-    } catch (e) {}
-  }
-
-  function loadFromCookies() {
-    try {
-      const ck = getCookie('kc_kittens');
-      if (!ck) return false;
-      kittens = parseFloat(ck) || 0;
-      const cv = getCookie('kc_clickValue');
-      if (cv) clickValue = parseFloat(cv) || 1;
-      const up = getCookie('kc_upgrades');
-      if (up) upgrades = JSON.parse(decodeURIComponent(up));
-      const uc = getCookie('kc_upgradeCosts');
-      if (uc) upgradeCosts = JSON.parse(decodeURIComponent(uc));
-      const sb = getCookie('kc_selectedBreed');
-      if (sb) selectedBreed = sb;
-      const bu = getCookie('kc_breedsUnlocked');
-      if (bu) breedsUnlocked = JSON.parse(decodeURIComponent(bu));
-      const ad = getCookie('kc_achievementsData');
-      if (ad) {
-        const arr = JSON.parse(decodeURIComponent(ad));
-        if (Array.isArray(arr)) {
-          for (let ach of arr) {
-            const found = achievementsData.find(a => a.id === ach.id);
-            if (found) found.achieved = !!ach.achieved;
-          }
-        }
-      }
-      const us = getCookie('kc_userSettings');
-      if (us) userSettings = JSON.parse(decodeURIComponent(us));
-      const bup = getCookie('kc_bonusUpgrades');
-      if (bup) bonusUpgrades = JSON.parse(decodeURIComponent(bup));
-      const buc = getCookie('kc_bonusUpgradeCosts');
-      if (buc) bonusUpgradeCosts = JSON.parse(decodeURIComponent(buc));
-      const pl = getCookie('kc_prestigeLevel');
-      if (pl) prestigeLevel = parseInt(pl) || 0;
-      const off = getCookie('kc_offline');
-      if (off) {
-        const o = JSON.parse(decodeURIComponent(off));
-        if (o.offlineClicks !== undefined) offlineClicks = o.offlineClicks;
-        if (o.offlineClickCost !== undefined) offlineClickCost = o.offlineClickCost;
-        if (o.offlineBoost !== undefined) offlineBoost = o.offlineBoost;
-        if (o.offlineBoostCost !== undefined) offlineBoostCost = o.offlineBoostCost;
-        if (o.offlineEmpire !== undefined) offlineEmpire = o.offlineEmpire;
-        if (o.offlineEmpireCost !== undefined) offlineEmpireCost = o.offlineEmpireCost;
-        if (o.offlineEfficiency !== undefined) offlineEfficiency = o.offlineEfficiency;
-        if (o.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = o.offlineEfficiencyCost;
-        if (o.offlineHibernate !== undefined) offlineHibernate = o.offlineHibernate;
-        if (o.offlineHibernateCost !== undefined) offlineHibernateCost = o.offlineHibernateCost;
-        if (o.offlineTimeCapsule !== undefined) offlineTimeCapsule = o.offlineTimeCapsule;
-        if (o.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = o.offlineTimeCapsuleCost;
-        if (o.lastSeenTime !== undefined) lastSeenTime = o.lastSeenTime;
-      }
-      return true;
-    } catch (e) { return false; }
-  }
-
   function saveProgress() {
     try {
       lastSeenTime = Date.now();
@@ -3437,7 +3354,6 @@ achievementsData.push(
         lastSeenTime
       };
       localStorage.setItem('kittenSave', JSON.stringify(saveData));
-      saveCookies();
     } catch (e) {}
   }
 
