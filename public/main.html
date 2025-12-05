@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
@@ -1993,7 +1993,7 @@ achievementsData.push(
   function initApp() {
     try {
       resetOverlays();
-      ensureKittenImg && ensureKittenImg();
+      typeof ensureKittenImg === 'function' && ensureKittenImg();
       attachKittenHandlers();
       scheduleGoldenKitten();
       if (goldenKittenEl) {
@@ -2060,6 +2060,9 @@ achievementsData.push(
 
   // Save user data to /userlist
   async function saveToUserList() {
+    if (location.protocol === 'file:' || !navigator.onLine) {
+      return;
+    }
     // Use tracking ID (userId if authenticated, sessionId if not)
     const trackingId = getTrackingId();
     
@@ -2404,15 +2407,19 @@ achievementsData.push(
   function attachKittenHandlers() {
     if (!kittenImg) return;
     if (kittenImg.__handlersAttached) return;
-    const onClick = () => {
-      clickSound.currentTime = 0;
-      clickSound.volume = userSettings.notifVolume;
-      clickSound.play();
+  const onClick = () => {
+      if (clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.volume = userSettings.notifVolume;
+        Promise.resolve(clickSound.play()).catch(()=>{});
+      }
       manualClickCount++;
       if (manualClickCount % 100 === 0) {
-        meowSound.currentTime = 0;
-        meowSound.volume = userSettings.notifVolume;
-        meowSound.play();
+        if (meowSound) {
+          meowSound.currentTime = 0;
+          meowSound.volume = userSettings.notifVolume;
+          Promise.resolve(meowSound.play()).catch(()=>{});
+        }
       }
       registerManualClick(clickValue);
       createMultipleKittens(5);
@@ -2429,6 +2436,16 @@ achievementsData.push(
   // Attach immediately if possible and also on DOM ready
   attachKittenHandlers();
   document.addEventListener('DOMContentLoaded', attachKittenHandlers);
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space' && !e.repeat) {
+      const ae = document.activeElement;
+      const typing = ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable);
+      if (!typing) {
+        e.preventDefault();
+        if (kittenImg) kittenImg.click();
+      }
+    }
+  });
   
   function registerManualClick(baseValue) {
     streakCount++;
@@ -3148,11 +3165,13 @@ achievementsData.push(
   });
   
   // Save to userlist every 5 seconds
-  setInterval(() => {
-    try {
-      saveToUserList();
-    } catch (e) {}
-  }, 5000);
+  if (location.protocol !== 'file:' && navigator.onLine) {
+    setInterval(() => {
+      try {
+        saveToUserList();
+      } catch (e) {}
+    }, 5000);
+  }
 
   // --- MYSTERY KITTEN RANDOM SPAWN ---
   let mysteryKittenTimeout = null;
