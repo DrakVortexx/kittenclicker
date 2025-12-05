@@ -1184,6 +1184,7 @@
     <div class="shop-tab active" id="tabClickValue" onclick="showShopTab('clickValue')">Click Value</div>
     <div class="shop-tab" id="tabAuto" onclick="showShopTab('auto')">Auto Upgrades</div>
     <div class="shop-tab" id="tabBonus" onclick="showShopTab('bonus')">Bonus Upgrades</div>
+    <div class="shop-tab" id="tabOffline" onclick="showShopTab('offline')">Offline Upgrades</div>
     <div class="shop-tab" id="tabBundles" onclick="showShopTab('bundles')">Bundles</div>
   </div>
   
@@ -1267,7 +1268,20 @@
         <div class="upgrade-count" id="goldenPawsCount">0</div>
       </div>
     </div>
-    
+    <div id="offlineContent" class="shop-tab-content">
+      <div class="shop-item" onclick="buyOfflineClick()"><div class="shop-item-content"><strong class="item-text">Offline Clicks</strong><br /><span class="item-text"> +1 offline click/sec</span><br />
+        <button id="offlineClickBtn">Buy for <span class="item-cost" id="offlineClickCost">1000</span></button>
+        <div class="upgrade-count" id="offlineClickCount">0</div>
+      </div></div>
+      <div class="shop-item" onclick="buyOfflineBoost()"><div class="shop-item-content"><strong class="item-text">Offline Boost</strong><br /><span class="item-text"> +50% offline bonus</span><br />
+        <button id="offlineBoostBtn">Buy for <span class="item-cost" id="offlineBoostCost">5000</span></button>
+        <div class="upgrade-count" id="offlineBoostCount">0</div>
+      </div></div>
+      <div class="shop-item" onclick="buyOfflineEmpire()"><div class="shop-item-content"><strong class="item-text">Offline Empire</strong><br /><span class="item-text"> +100% offline bonus</span><br />
+        <button id="offlineEmpireBtn">Buy for <span class="item-cost" id="offlineEmpireCost">25000</span></button>
+        <div class="upgrade-count" id="offlineEmpireCount">0</div>
+      </div></div>
+    </div>
     <div id="bundlesContent" class="shop-tab-content">
       <div id="bundlesContainer"></div>
     </div>
@@ -1747,7 +1761,7 @@ achievementsData.push(
     let christmasLabel = `<b>${breedNames.christmas_kitten}</b>`;
     
     // Add event tag for Christmas kitten
-    const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
+    const isChristmas = (now.getMonth() === 11 && now.getDate() >= 1 && now.getDate() <= 31);
     
     if (isChristmas) {
       christmasLabel += `<span class="breed-event-tag">EVENT</span>`;
@@ -1758,7 +1772,7 @@ achievementsData.push(
       if (isChristmas) {
         christmasLabel += `<span class="breed-lock">🔒 (100k kittens & 12 achievements required)</span>`;
       } else {
-        christmasLabel += `<span class="breed-lock">🔒 (Only available Dec 12-31)</span>`;
+        christmasLabel += `<span class="breed-lock">🔒 (Only available Dec 1-31)</span>`;
       }
     }
 
@@ -2143,6 +2157,8 @@ achievementsData.push(
     document.getElementById('clickValueContent').classList.remove('active');
     document.getElementById('autoContent').classList.remove('active');
     document.getElementById('bonusContent').classList.remove('active');
+    const offlineContent = document.getElementById('offlineContent');
+    if (offlineContent) offlineContent.classList.remove('active');
     const bundlesContent = document.getElementById('bundlesContent');
     if (bundlesContent) bundlesContent.classList.remove('active');
     
@@ -2150,6 +2166,8 @@ achievementsData.push(
     document.getElementById('tabClickValue').classList.remove('active');
     document.getElementById('tabAuto').classList.remove('active');
     document.getElementById('tabBonus').classList.remove('active');
+    const tabOffline = document.getElementById('tabOffline');
+    if (tabOffline) tabOffline.classList.remove('active');
     const tabBundles = document.getElementById('tabBundles');
     if (tabBundles) tabBundles.classList.remove('active');
     
@@ -2347,7 +2365,7 @@ achievementsData.push(
     if (!breedsUnlocked.christmas_kitten) {
       const achievementCount = achievementsData.filter(a => a.achieved).length;
       const now = new Date();
-      const isChristmas = (now.getMonth() === 11 && now.getDate() >= 12 && now.getDate() <= 31);
+    const isChristmas = (now.getMonth() === 11 && now.getDate() >= 1 && now.getDate() <= 31);
       
       // Unlock based on kittens (score), not manual click count
       if (isChristmas && kittens >= 100000 && achievementCount >= 12) {
@@ -2874,7 +2892,7 @@ achievementsData.push(
       } else {
         // Check if it's Christmas season and requirements are met
         if (!isChristmas) {
-          showNotification("Christmas Kitten is only available from Dec 12-31!");
+          showNotification("Christmas Kitten is only available from Dec 1-31!");
           return;
         }
         
@@ -3009,7 +3027,7 @@ achievementsData.push(
     const now = new Date();
     const month = now.getMonth() + 1;
     const day = now.getDate();
-    if (overlay && month === 12 && day >= 12 && day <= 31) {
+    if (overlay && month === 12 && day >= 1 && day <= 31) {
       overlay.classList.add('christmas-shop');
       if (header) header.textContent = 'Kitten Shop 🎄';
     } else if (overlay) {
