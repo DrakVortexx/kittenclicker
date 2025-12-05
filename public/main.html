@@ -1423,7 +1423,6 @@ let breedsUnlocked = {
     himalayan: false,
     halloween_cat: false,
     christmas_kitten: false,
-    cat_of_the_cosmos: false,
     ragdoll: false,
     persian: false,
     bengal: false,
@@ -1438,7 +1437,6 @@ let breedImages = {
     himalayan: "https://cdn.pixabay.com/photo/2016/03/24/21/21/cat-1277665_1280.jpg",
     halloween_cat: "https://cdn.pixabay.com/photo/2022/08/06/15/46/halloween-7368864_1280.jpg",
     christmas_kitten: "https://cdn.pixabay.com/photo/2016/12/11/02/32/cat-1898638_1280.jpg",
-    cat_of_the_cosmos: "https://cdn.pixabay.com/photo/2025/11/10/12/55/cat-9947981_1280.png",
     ragdoll: "https://cdn.pixabay.com/photo/2018/06/28/14/12/cat-3504008_1280.jpg",
     persian: "https://cdn.pixabay.com/photo/2017/01/21/08/19/cat-1996569_1280.jpg",
     bengal: "https://cdn.pixabay.com/photo/2022/11/17/17/46/cat-7598590_1280.jpg",
@@ -1453,7 +1451,6 @@ let breedNames = {
     himalayan: "Himalayan",
     halloween_cat: "Halloween Cat",
     christmas_kitten: "Christmas Kitten",
-    cat_of_the_cosmos: "Cat of the Cosmos",
     ragdoll: "Ragdoll",
     persian: "Persian",
     bengal: "Bengal",
@@ -1468,7 +1465,6 @@ let extraCPSBreed = {
     himalayan: 25,
     halloween_cat: 200,
     christmas_kitten: 250,
-    cat_of_the_cosmos: 1000,
     ragdoll: 40,
     persian: 35,
     bengal: 60,
@@ -1481,7 +1477,7 @@ let fusionRecipes = {
   "himalayan|persian": "mythic_chimera",
   "ragdoll|bengal": "wild_ragdoll"
 };
-let achievementsData = [
+  let achievementsData = [
     // Early game / tutorial
     { id: 'click1', text: 'CLICK: Click the kitten!', achieved: false, condition: () => kittens > 0 },
     { id: 'milkBowl1', text: 'You have to start somewhere: Buy your first Milk Bowl', achieved: false, condition: () => upgrades.milkBowl >= 1 },
@@ -1526,8 +1522,8 @@ let achievementsData = [
 
     // Special / rare
     { id: 'rich_kitty', text: 'Rich Kitty | Reach 100,000 kittens in a single run', achieved: false, condition: () => kittens >= 100000 },
-    { id: 'cosmos_unlock', text: 'Cosmic Explorer: Unlock the Cat of the Cosmos!', achieved: false, condition: () => breedsUnlocked.cat_of_the_cosmos }
-];
+    
+  ];
 achievementsData.push(
   { id: 'cps1k', text: 'Speed Paw | Reach 1,000 CPS', achieved: false, condition: () => (upgrades.autoClicker * 5 + upgrades.autoKittenFarm * 7 + upgrades.kittenPlanet * 30 + (extraCPSBreed[selectedBreed] || 0)) >= 1000 },
   { id: 'cps10k', text: 'Blizzard of Paws | Reach 10,000 CPS', achieved: false, condition: () => (upgrades.autoClicker * 5 + upgrades.autoKittenFarm * 7 + upgrades.kittenPlanet * 30 + (extraCPSBreed[selectedBreed] || 0)) >= 10000 },
@@ -1641,7 +1637,7 @@ achievementsData.push(
   function renderBreeds() {
     const list = document.getElementById('breedsList');
     list.innerHTML = '';
-    ["american_shorthair", "maine_coon", "siamese", "himalayan", "ragdoll", "persian", "bengal", "cat_of_the_cosmos"].forEach(breed => {
+    ["american_shorthair", "maine_coon", "siamese", "himalayan", "ragdoll", "persian", "bengal"].forEach(breed => {
       const div = document.createElement('div');
       div.style.margin = "28px 0 25px 0";
       div.style.padding = "12px";
@@ -1681,7 +1677,7 @@ achievementsData.push(
       if (breed === "ragdoll") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +40 CPS & +30 Click Value</div>";
       if (breed === "persian") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +35 CPS & +20 Click Value</div>";
       if (breed === "bengal") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +60 CPS & +40 Click Value</div>";
-      if (breed === "cat_of_the_cosmos") bonusText = "<div style='font-size:15px;margin-top:4px;color:#ad1457;'><b>Bonus:</b> +1000 CPS & +500 Click Value</div>";
+      
 
       div.innerHTML = `
         <div style="font-size:20px;margin-bottom:8px;">${label}</div>
