@@ -1269,6 +1269,10 @@
       </div>
     </div>
     <div id="offlineContent" class="shop-tab-content">
+      <div class="shop-item" onclick="buyOfflineClick()"><div class="shop-item-content"><strong class="item-text">Idle Paws</strong><br /><span class="item-text"> +1 offline click/sec</span><br />
+        <button id="offlineClickBtn">Buy for <span class="item-cost" id="offlineClickCost">5000</span></button>
+        <div class="upgrade-count" id="offlineClickCount">0</div>
+      </div></div>
       <div class="shop-item" onclick="buyOfflineEfficiency()"><div class="shop-item-content"><strong class="item-text">Efficiency Training</strong><br /><span class="item-text"> +3% offline bonus</span><br />
         <button id="offlineEfficiencyBtn">Buy for <span class="item-cost" id="offlineEfficiencyCost">250000</span></button>
         <div class="upgrade-count" id="offlineEfficiencyCount">0</div>
@@ -1591,6 +1595,8 @@ achievementsData.push(
   let goldenBoostCPS = 0;
   let goldenBoostTimer = null;
 
+  let offlineClicks = 0;
+  let offlineClickCost = 5000;
   let offlineEfficiency = 0;
   let offlineEfficiencyCost = 250000;
   let offlineHibernate = 0;
@@ -2603,6 +2609,7 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorCost')) document.getElementById('nebulaCursorCost').textContent = upgradeCosts.nebulaCursor;
     if(document.getElementById('starForgeCost')) document.getElementById('starForgeCost').textContent = upgradeCosts.starForge;
     
+    if(document.getElementById('offlineClickCost')) document.getElementById('offlineClickCost').textContent = offlineClickCost;
     if(document.getElementById('offlineEfficiencyCost')) document.getElementById('offlineEfficiencyCost').textContent = offlineEfficiencyCost;
     if(document.getElementById('offlineHibernateCost')) document.getElementById('offlineHibernateCost').textContent = offlineHibernateCost;
     if(document.getElementById('offlineTimeCapsuleCost')) document.getElementById('offlineTimeCapsuleCost').textContent = offlineTimeCapsuleCost;
@@ -2621,6 +2628,7 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorBtn')) document.getElementById('nebulaCursorBtn').disabled = kittens < upgradeCosts.nebulaCursor;
     if(document.getElementById('starForgeBtn')) document.getElementById('starForgeBtn').disabled = kittens < upgradeCosts.starForge;
 
+    if(document.getElementById('offlineClickBtn')) document.getElementById('offlineClickBtn').disabled = kittens < offlineClickCost;
     if(document.getElementById('offlineEfficiencyBtn')) document.getElementById('offlineEfficiencyBtn').disabled = kittens < offlineEfficiencyCost;
     if(document.getElementById('offlineHibernateBtn')) document.getElementById('offlineHibernateBtn').disabled = kittens < offlineHibernateCost;
     if(document.getElementById('offlineTimeCapsuleBtn')) document.getElementById('offlineTimeCapsuleBtn').disabled = kittens < offlineTimeCapsuleCost;
@@ -2663,6 +2671,7 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorCount')) document.getElementById('nebulaCursorCount').textContent = upgrades.nebulaCursor;
     if(document.getElementById('starForgeCount')) document.getElementById('starForgeCount').textContent = upgrades.starForge;
     
+    if(document.getElementById('offlineClickCount')) document.getElementById('offlineClickCount').textContent = offlineClicks;
     if(document.getElementById('offlineEfficiencyCount')) document.getElementById('offlineEfficiencyCount').textContent = offlineEfficiency;
     if(document.getElementById('offlineHibernateCount')) document.getElementById('offlineHibernateCount').textContent = offlineHibernate;
     if(document.getElementById('offlineTimeCapsuleCount')) document.getElementById('offlineTimeCapsuleCount').textContent = offlineTimeCapsule;
@@ -2689,6 +2698,7 @@ achievementsData.push(
       upgrades[name]++;
       upgradeCosts[name] = Math.ceil(upgradeCosts[name] * 1.3);
       updateUI();
+      saveProgress();
     }
   }
   
@@ -2698,6 +2708,7 @@ achievementsData.push(
       upgrades.autoClicker++;
       upgradeCosts.autoClicker = Math.ceil(upgradeCosts.autoClicker * 1.3);
       updateUI();
+      saveProgress();
     }
   }
   
@@ -2707,6 +2718,7 @@ achievementsData.push(
       upgrades.autoKittenFarm++;
       upgradeCosts.autoKittenFarm = Math.ceil(upgradeCosts.autoKittenFarm * 1.3);
       updateUI();
+      saveProgress();
     }
   }
   
@@ -2716,6 +2728,7 @@ achievementsData.push(
       upgrades.kittenPlanet++;
       upgradeCosts.kittenPlanet = Math.ceil(upgradeCosts.kittenPlanet * 1.3);
       updateUI();
+      saveProgress();
     }
   }
 
@@ -2725,6 +2738,7 @@ achievementsData.push(
       upgrades.nebulaCursor++;
       upgradeCosts.nebulaCursor = Math.ceil(upgradeCosts.nebulaCursor * 1.3);
       updateUI();
+      saveProgress();
     }
   }
 
@@ -2734,6 +2748,7 @@ achievementsData.push(
       upgrades.starForge++;
       upgradeCosts.starForge = Math.ceil(upgradeCosts.starForge * 1.3);
       updateUI();
+      saveProgress();
     }
   }
   
@@ -2751,6 +2766,7 @@ achievementsData.push(
       // No need to increase cost if it's a one-time purchase
       // bonusUpgradeCosts[name] = Math.ceil(bonusUpgradeCosts[name] * 1.2);
       updateUI();
+      saveProgress();
     }
   }
   
@@ -2771,11 +2787,11 @@ achievementsData.push(
         upgrades.nebulaCursor * 15 +
         upgrades.starForge * 120 +
         breedCPS + gb
-      ) + offlineClicks + (offlineHibernate * 0.2);
+      ) + offlineClicks + (offlineHibernate * 0.5);
     })();
     
     // Apply boosts
-    let boostMultiplier = 1 + (offlineBoost * 0.5) + (offlineEmpire * 0.5) + (offlineEfficiency * 0.03) + (offlineTimeCapsule * 0.10);
+    let boostMultiplier = 1 + (offlineEfficiency * 0.05) + (offlineTimeCapsule * 0.15);
     
     // Calculate total offline bonus
     const offlineBonus = baseClicksPerSecond * offlineTime * boostMultiplier;
@@ -2793,57 +2809,41 @@ achievementsData.push(
     }
   }
   
-  // Buy offline click upgrade
+  
   function buyOfflineClick() {
     if (kittens >= offlineClickCost) {
       kittens -= offlineClickCost;
       offlineClicks++;
-      offlineClickCost = Math.ceil(offlineClickCost * 1.5);
+      offlineClickCost = Math.ceil(offlineClickCost * 1.6);
       updateUI();
-    }
-  }
-  
-  // Buy offline boost upgrade
-  function buyOfflineBoost() {
-    if (kittens >= offlineBoostCost) {
-      kittens -= offlineBoostCost;
-      offlineBoost++;
-      offlineBoostCost = Math.ceil(offlineBoostCost * 1.5);
-      updateUI();
-    }
-  }
-  
-  // Buy offline empire upgrade
-  function buyOfflineEmpire() {
-    if (kittens >= offlineEmpireCost) {
-      kittens -= offlineEmpireCost;
-      offlineEmpire++;
-      offlineEmpireCost = Math.ceil(offlineEmpireCost * 1.5);
-      updateUI();
+      saveProgress();
     }
   }
   function buyOfflineEfficiency() {
     if (kittens >= offlineEfficiencyCost) {
       kittens -= offlineEfficiencyCost;
       offlineEfficiency++;
-      offlineEfficiencyCost = Math.ceil(offlineEfficiencyCost * 1.7);
+      offlineEfficiencyCost = Math.ceil(offlineEfficiencyCost * 1.8);
       updateUI();
+      saveProgress();
     }
   }
   function buyOfflineHibernate() {
     if (kittens >= offlineHibernateCost) {
       kittens -= offlineHibernateCost;
       offlineHibernate++;
-      offlineHibernateCost = Math.ceil(offlineHibernateCost * 1.7);
+      offlineHibernateCost = Math.ceil(offlineHibernateCost * 1.8);
       updateUI();
+      saveProgress();
     }
   }
   function buyOfflineTimeCapsule() {
     if (kittens >= offlineTimeCapsuleCost) {
       kittens -= offlineTimeCapsuleCost;
       offlineTimeCapsule++;
-      offlineTimeCapsuleCost = Math.ceil(offlineTimeCapsuleCost * 1.8);
+      offlineTimeCapsuleCost = Math.ceil(offlineTimeCapsuleCost * 2.0);
       updateUI();
+      saveProgress();
     }
   }
   
@@ -3040,7 +3040,7 @@ achievementsData.push(
       bonusUpgradeCosts = { speedBoost: 5000, doublePoints: 15000, goldenPaws: 50000 };
       prestigeLevel = 0;
       offlineClicks = 0;
-      offlineClickCost = 1000;
+      offlineClickCost = 5000;
       offlineBoost = 0;
       offlineBoostCost = 5000;
       offlineEmpire = 0;
@@ -3293,51 +3293,53 @@ achievementsData.push(
   // --- SHOP OPENING LOGIC ---
   // Shop is now opened via openOverlay() function like other overlays
 
-  // --- SAVE TO LOCAL STORAGE EVERY 5 SECONDS ---
-  setInterval(() => {
+  function saveProgress() {
     try {
       lastSeenTime = Date.now();
-      const saveData = { 
-        kittens, 
-        clickValue, 
-        upgrades, 
-        upgradeCosts, 
-        selectedBreed, 
-        breedsUnlocked, 
-        achievementsData, 
-        userSettings, 
-        bonusUpgrades, 
-        bonusUpgradeCosts, 
-        prestigeLevel, 
-        offlineClicks, 
-        offlineClickCost, 
-        offlineBoost, 
-        offlineBoostCost, 
-        offlineEmpire, 
-        offlineEmpireCost, 
+      const saveData = {
+        kittens,
+        clickValue,
+        upgrades,
+        upgradeCosts,
+        selectedBreed,
+        breedsUnlocked,
+        achievementsData,
+        userSettings,
+        bonusUpgrades,
+        bonusUpgradeCosts,
+        prestigeLevel,
+        offlineClicks,
+        offlineClickCost,
+        offlineBoost,
+        offlineBoostCost,
+        offlineEmpire,
+        offlineEmpireCost,
         offlineEfficiency,
         offlineEfficiencyCost,
         offlineHibernate,
         offlineHibernateCost,
         offlineTimeCapsule,
         offlineTimeCapsuleCost,
-        lastSeenTime 
+        lastSeenTime
       };
       const saveString = btoa(JSON.stringify(saveData));
       localStorage.setItem('kittenSave', saveString);
-      
-      
     } catch (e) {}
-  }, 5000);
+  }
+
+  setInterval(saveProgress, 5000);
 
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
-      lastSeenTime = Date.now();
+      saveProgress();
     }
   });
 
   window.addEventListener('beforeunload', function() {
-    lastSeenTime = Date.now();
+    saveProgress();
+  });
+  window.addEventListener('pagehide', function() {
+    saveProgress();
   });
 
   // --- PRESTIGE LOGIC ---
