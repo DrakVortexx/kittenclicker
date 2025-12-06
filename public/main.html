@@ -2111,6 +2111,52 @@ achievementsData.push(
       console.error('Error saving to user list:', error);
     }
   }
+
+  async function loadFromUserList() {
+    if (location.protocol === 'file:' || !navigator.onLine) {
+      return false;
+    }
+    const trackingId = getTrackingId();
+    if (!trackingId) {
+      return false;
+    }
+    try {
+      const res = await fetch('/userlist?userId=' + encodeURIComponent(trackingId), { method: 'GET' });
+      if (!res.ok) return false;
+      const data = await res.json();
+      if (!data) return false;
+      kittens = data.kittens ?? kittens;
+      clickValue = data.clickValue ?? clickValue;
+      upgrades = data.upgrades ?? upgrades;
+      upgradeCosts = data.upgradeCosts ?? upgradeCosts;
+      selectedBreed = data.selectedBreed ?? selectedBreed;
+      breedsUnlocked = data.breedsUnlocked ?? breedsUnlocked;
+      if (Array.isArray(data.achievementsData)) {
+        for (let ach of data.achievementsData) {
+          const found = achievementsData.find(a => a.id === ach.id);
+          if (found) found.achieved = ach.achieved;
+        }
+      }
+      if (data.userSettings) {
+        userSettings = data.userSettings;
+      }
+      if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
+      if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
+      if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
+      if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
+      if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
+      if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
+      if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
+      if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
+      if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
+      if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
+      if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
+      if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
   
   function showBreedsTab(tabName) {
     document.getElementById('breedsContent').classList.remove('active');
@@ -3096,17 +3142,24 @@ achievementsData.push(
   }
 
   // --- SAVE/LOAD ON PAGE LOAD ---
-  window.addEventListener('load', () => {
+  window.addEventListener('load', async () => {
     try {
-      const saved = localStorage.getItem('kittenSave');
-      if (saved) {
-        let data = null;
+      let loadedFromServer = false;
+      if (location.protocol !== 'file:' && navigator.onLine) {
         try {
-          data = JSON.parse(saved);
-        } catch(_) {
-          try { data = JSON.parse(atob(saved)); } catch(_) {}
-        }
-        if (data) {
+          loadedFromServer = await loadFromUserList();
+        } catch(_) {}
+      }
+      if (!loadedFromServer) {
+        const saved = localStorage.getItem('kittenSave');
+        if (saved) {
+          let data = null;
+          try {
+            data = JSON.parse(saved);
+          } catch(_) {
+            try { data = JSON.parse(atob(saved)); } catch(_) {}
+          }
+          if (data) {
           kittens = data.kittens || 0;
           clickValue = data.clickValue || 1;
           upgrades = data.upgrades || upgrades;
@@ -3138,6 +3191,7 @@ achievementsData.push(
           if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
           if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
           if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
+          }
         }
       }
     } catch (e) {}
@@ -3354,6 +3408,9 @@ achievementsData.push(
         lastSeenTime
       };
       localStorage.setItem('kittenSave', JSON.stringify(saveData));
+      if (location.protocol !== 'file:' && navigator.onLine) {
+        try { saveToUserList(); } catch(e) {}
+      }
     } catch (e) {}
   }
 
