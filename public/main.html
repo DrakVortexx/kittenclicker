@@ -1045,6 +1045,15 @@
     opacity: 0;
   }
 
+  .shop-item-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
   .bonus-item-details {
     position: absolute;
     top: 0;
@@ -1190,31 +1199,31 @@
   
   <div id="shopContent" class="shop-content">
     <div id="clickValueContent" class="shop-tab-content active">
-      <div class="shop-item" onclick="buyUpgrade('milkBowl', 0.5)"><div class="shop-item-content"><strong class="item-text">Milk Bowl</strong><br /><span class="item-text"> +0.5 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('milkBowl', 0.5)"><div class="shop-item-content"><img class="shop-item-image" src="https://media.istockphoto.com/id/484526718/photo/bowl-of-fresh-milk.jpg?s=2048x2048&w=is&k=20&c=5cmm4PeNrbrkOsA8QBHEglYszcJEQzNGXAup3_48ipA=" alt="Milk Bowl"><strong class="item-text">Milk Bowl</strong><br /><span class="item-text"> +0.5 click value</span><br />
         <button id="milkBowlBtn">Buy for <span class="item-cost" id="milkBowlCost">25</span></button>
         <div class="upgrade-count" id="milkBowlCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('catFood', 2)"><div class="shop-item-content"><strong class="item-text">Cat Food</strong><br /><span class="item-text"> +2 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('catFood', 2)"><div class="shop-item-content"><img class="shop-item-image" src="https://media.istockphoto.com/id/1690664358/photo/dry-cat-food-flies-out-of-a-bowl-on-a-white-background-isolated.jpg?s=2048x2048&w=is&k=20&c=DtXb_akbbzQ3WOzN78uyfV896xbcW7DTCJRwLqxloQY=" alt="Cat Food"><strong class="item-text">Cat Food</strong><br /><span class="item-text"> +2 click value</span><br />
         <button id="catFoodBtn">Buy for <span class="item-cost" id="catFoodCost">115</span></button>
         <div class="upgrade-count" id="catFoodCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('scratcher', 7)"><div class="shop-item-content"><strong class="item-text">Scratcher</strong><br /><span class="item-text"> +7 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('scratcher', 7)"><div class="shop-item-content"><img class="shop-item-image" src="https://media.istockphoto.com/id/1474831977/photo/young-british-kitten-sharpening-her-claws-in-the-living-room-expressive-green-eyes.jpg?s=612x612&w=0&k=20&c=G7lEGdCXri4Z-rX-mwjN6_c1V-SGW3OkS54oF6wkXK0=" alt="Scratcher"><strong class="item-text">Scratcher</strong><br /><span class="item-text"> +7 click value</span><br />
         <button id="scratcherBtn">Buy for <span class="item-cost" id="scratcherCost">700</span></button>
         <div class="upgrade-count" id="scratcherCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('kittenFactory', 15)"><div class="shop-item-content"><strong class="item-text">Kitten Factory</strong><br /><span class="item-text"> +15 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('kittenFactory', 15)"><div class="shop-item-content"><img class="shop-item-image" src="https://cdn.pixabay.com/photo/2020/02/20/12/12/cat-4864605_1280.jpg" alt="Kitten Factory"><strong class="item-text">Kitten Factory</strong><br /><span class="item-text"> +15 click value</span><br />
         <button id="kittenFactoryBtn">Buy for <span class="item-cost" id="kittenFactoryCost">5000</span></button>
         <div class="upgrade-count" id="kittenFactoryCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('cityOfKittens', 30)"><div class="shop-item-content"><strong class="item-text">City of Kittens</strong><br /><span class="item-text"> +30 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('cityOfKittens', 30)"><div class="shop-item-content"><img class="shop-item-image" src="https://cdn.pixabay.com/photo/2023/08/04/08/34/ai-generated-8168676_1280.jpg" alt="City of Kittens"><strong class="item-text">City of Kittens</strong><br /><span class="item-text"> +30 click value</span><br />
         <button id="cityOfKittensBtn">Buy for <span class="item-cost" id="cityOfKittensCost">30000</span></button>
         <div class="upgrade-count" id="cityOfKittensCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('worldOfMeows', 80)"><div class="shop-item-content"><strong class="item-text">A World of Meows</strong><br /><span class="item-text"> +80 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('worldOfMeows', 80)"><div class="shop-item-content"><img class="shop-item-image" src="https://media.istockphoto.com/id/898916122/photo/cat-astronaut-in-space-on-background-of-the-globe-elements-of-this-image-furnished-by-nasa.jpg?s=2048x2048&w=is&k=20&c=DhAVw_atm-4DbNys2PyUWw4c9gwH408rrDmmAuvH5a0=" alt="A World of Meows"><strong class="item-text">A World of Meows</strong><br /><span class="item-text"> +80 click value</span><br />
         <button id="worldOfMeowsBtn">Buy for <span class="item-cost" id="worldOfMeowsCost">200000</span></button>
         <div class="upgrade-count" id="worldOfMeowsCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('goldKitty', 150)"><div class="shop-item-content"><strong class="item-text">Gold Kitty</strong><br /><span class="item-text"> +150 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('goldKitty', 150)"><div class="shop-item-content"><img class="shop-item-image" src="https://cdn.pixabay.com/photo/2024/04/05/19/08/cat-8678042_1280.png" alt="Gold Kitty"><strong class="item-text">Gold Kitty</strong><br /><span class="item-text"> +150 click value</span><br />
         <button id="goldKittyBtn">Buy for <span class="item-cost" id="goldKittyCost">15000000</span></button>
         <div class="upgrade-count" id="goldKittyCount">0</div>
       </div></div>
