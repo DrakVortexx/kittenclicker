@@ -3230,14 +3230,7 @@ achievementsData.push(
     saveProgress();
   });
   
-  // Save to userlist every 5 seconds
-  if (location.protocol !== 'file:' && navigator.onLine) {
-    setInterval(() => {
-      try {
-        saveToUserList();
-      } catch (e) {}
-    }, 5000);
-  }
+  // Server saves are triggered inside saveProgress(); interval below handles cadence
 
   // --- MYSTERY KITTEN RANDOM SPAWN ---
   let mysteryKittenTimeout = null;
@@ -3414,7 +3407,7 @@ achievementsData.push(
     } catch (e) {}
   }
 
-  setInterval(saveProgress, 5000);
+  setInterval(saveProgress, 10000);
 
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
