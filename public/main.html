@@ -1615,6 +1615,37 @@ achievementsData.push(
   
 
   // --- SETTINGS LOGIC ---
+  (function earlyHydrate() {
+    try {
+      const saved = localStorage.getItem('kittenSave');
+      if (saved) {
+        let data = null;
+        try { data = JSON.parse(saved); }
+        catch(_) { try { data = JSON.parse(atob(saved)); } catch(_) {} }
+        if (data) {
+          if (data.kittens !== undefined) kittens = data.kittens;
+          if (data.clickValue !== undefined) clickValue = data.clickValue;
+          if (data.upgrades) upgrades = data.upgrades;
+          if (data.upgradeCosts) upgradeCosts = data.upgradeCosts;
+          if (data.selectedBreed) selectedBreed = data.selectedBreed;
+          if (data.breedsUnlocked) breedsUnlocked = data.breedsUnlocked;
+          if (data.userSettings) userSettings = data.userSettings;
+          if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
+          if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
+          if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
+          if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
+          if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
+          if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
+          if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
+          if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
+          if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
+          if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
+          if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
+          if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
+        }
+      }
+    } catch(_) {}
+  })();
   function updateSettingsUI() {
     document.getElementById('themeSelect').value = userSettings.theme;
     document.getElementById('floatScoreToggle').checked = userSettings.floatScore;
