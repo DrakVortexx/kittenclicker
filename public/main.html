@@ -2047,7 +2047,7 @@ achievementsData.push(
       renderDynamicShop();
       renderBundles();
       updatePrestigeInfo();
-      if (location.protocol !== 'file:') {
+      if (serverEnabled) {
         startHeartbeat();
         startPlayerCountStream();
         updatePlayerCount();
@@ -2100,7 +2100,7 @@ achievementsData.push(
 
   // Save user data to /userlist
   async function saveToUserList() {
-    if (location.protocol === 'file:' || !navigator.onLine) {
+    if (!serverEnabled || !navigator.onLine) {
       return;
     }
     // Use tracking ID (userId if authenticated, sessionId if not)
@@ -2153,7 +2153,7 @@ achievementsData.push(
   }
 
   async function loadFromUserList() {
-    if (location.protocol === 'file:' || !navigator.onLine) {
+    if (!serverEnabled || !navigator.onLine) {
       return false;
     }
     const trackingId = getTrackingId();
@@ -3185,7 +3185,7 @@ achievementsData.push(
   window.addEventListener('load', async () => {
     try {
       let loadedFromServer = false;
-      if (location.protocol !== 'file:' && navigator.onLine) {
+      if (serverEnabled && navigator.onLine) {
         try {
           loadedFromServer = await loadFromUserList();
         } catch(_) {}
@@ -3441,7 +3441,7 @@ achievementsData.push(
         lastSeenTime
       };
       localStorage.setItem('kittenSave', JSON.stringify(saveData));
-      if (location.protocol !== 'file:' && navigator.onLine) {
+      if (serverEnabled && navigator.onLine) {
         try { saveToUserList(); } catch(e) {}
       }
     } catch (e) {}
@@ -3488,3 +3488,5 @@ achievementsData.push(
 </script>
 </body>
 </html>
+  // Server integration toggle
+  const serverEnabled = false;
