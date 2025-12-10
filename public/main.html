@@ -225,6 +225,10 @@
     /* display controlled by openOverlay; when open, we set to flex */
     flex-direction: column;
     padding: 60px 20px 20px;
+    background: linear-gradient(135deg, #fffafa, #e8f5e9);
+    background-image: radial-gradient(rgba(255,255,255,0.6) 1.5px, transparent 1.5px);
+    background-size: 24px 24px, auto;
+    background-blend-mode: overlay;
   }
 
   #shopOverlay .shop-content {
@@ -279,14 +283,14 @@
     display: flex;
     justify-content: center;
     margin-bottom: 25px;
-    border-bottom: 2px solid #f8bbd0;
+    border-bottom: 2px solid #c62828;
     padding-bottom: 12px;
     gap: 8px;
   }
 
   .shop-tab {
     padding: 10px 20px;
-    background: #f8bbd0;
+    background: linear-gradient(135deg, #e53935, #2e7d32);
     border: none;
     border-radius: 12px 12px 0 0;
     cursor: pointer;
@@ -297,13 +301,13 @@
   }
 
   .shop-tab:hover {
-    background: #e91e63;
+    background: #2e7d32;
     color: white;
     transform: translateY(-2px);
   }
 
   .shop-tab.active {
-    background: #c2185b;
+    background: #b71c1c;
     color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
@@ -318,36 +322,13 @@
     display: block;
   }
 
-  #shopOverlay.christmas-shop {
-    background: radial-gradient(circle at 20% 10%, #fffafa 0%, #f8bbd0 60%), linear-gradient(145deg, #e0f2f1, #ffffff);
-  }
-  #shopOverlay.christmas-shop .shop-header {
-    border-bottom-color: #d32f2f;
-  }
-  #shopOverlay.christmas-shop .shop-header h2 {
-    color: #d32f2f;
-  }
-  #shopOverlay.christmas-shop .shop-tab {
-    background: #e8f5e9;
-    color: #1b5e20;
-  }
-  #shopOverlay.christmas-shop .shop-tab.active {
-    background: #1b5e20;
-    color: #ffffff;
-  }
-  #shopOverlay.christmas-shop .shop-item {
-    background: linear-gradient(145deg, #e8f5e9, #ffffff);
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 6px 18px rgba(27, 94, 32, 0.2);
-  }
-
   /* Shop items */
   .shop-item {
     margin: 18px 0;
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(145deg, #f8bbd0, #f48fb1);
+    background: linear-gradient(145deg, #fff5f5, #ffe0e0);
     position: relative;
     transition: all 0.3s ease;
     border: 2px solid rgba(255, 255, 255, 0.5);
@@ -1045,15 +1026,6 @@
     opacity: 0;
   }
 
-  .shop-item-image {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
-
   .bonus-item-details {
     position: absolute;
     top: 0;
@@ -1186,44 +1158,43 @@
 <div id="shopOverlay" class="overlay">
   <button class="closeOverlay" onclick="closeOverlay('shopOverlay')">×</button>
   <div class="shop-header">
-    <h2>Kitten Shop</h2>
+    <h2>Kitten Shop 🎄</h2>
   </div>
   
   <div class="shop-tabs">
-    <div class="shop-tab active" id="tabClickValue" onclick="showShopTab('clickValue')">Click Value</div>
-    <div class="shop-tab" id="tabAuto" onclick="showShopTab('auto')">Auto Upgrades</div>
-    <div class="shop-tab" id="tabBonus" onclick="showShopTab('bonus')">Bonus Upgrades</div>
-    <div class="shop-tab" id="tabOffline" onclick="showShopTab('offline')">Offline Upgrades</div>
-    <div class="shop-tab" id="tabBundles" onclick="showShopTab('bundles')">Bundles</div>
+    <div class="shop-tab active" id="tabClickValue" onclick="showShopTab('clickValue')">Click Value 🎁</div>
+    <div class="shop-tab" id="tabAuto" onclick="showShopTab('auto')">Auto Upgrades ⛄️</div>
+    <div class="shop-tab" id="tabBonus" onclick="showShopTab('bonus')">Bonus Upgrades ❄️</div>
+    <div class="shop-tab" id="tabBundles" onclick="showShopTab('bundles')">Bundles 🎁</div>
   </div>
   
   <div id="shopContent" class="shop-content">
     <div id="clickValueContent" class="shop-tab-content active">
-      <div class="shop-item" onclick="buyUpgrade('milkBowl', 0.5)"><div class="shop-item-content"><img class="shop-item-image" src="https://media.istockphoto.com/id/484526718/photo/bowl-of-fresh-milk.jpg?s=2048x2048&w=is&k=20&c=5cmm4PeNrbrkOsA8QBHEglYszcJEQzNGXAup3_48ipA=" alt="Milk Bowl"><strong class="item-text">Milk Bowl</strong><br /><span class="item-text"> +0.5 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('milkBowl', 0.5)"><div class="shop-item-content"><strong class="item-text">Milk Bowl</strong><br /><span class="item-text"> +0.5 click value</span><br />
         <button id="milkBowlBtn">Buy for <span class="item-cost" id="milkBowlCost">25</span></button>
         <div class="upgrade-count" id="milkBowlCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('catFood', 2)"><div class="shop-item-content"><img class="shop-item-image" src="https://media.istockphoto.com/id/1690664358/photo/dry-cat-food-flies-out-of-a-bowl-on-a-white-background-isolated.jpg?s=2048x2048&w=is&k=20&c=DtXb_akbbzQ3WOzN78uyfV896xbcW7DTCJRwLqxloQY=" alt="Cat Food"><strong class="item-text">Cat Food</strong><br /><span class="item-text"> +2 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('catFood', 2)"><div class="shop-item-content"><strong class="item-text">Cat Food</strong><br /><span class="item-text"> +2 click value</span><br />
         <button id="catFoodBtn">Buy for <span class="item-cost" id="catFoodCost">115</span></button>
         <div class="upgrade-count" id="catFoodCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('scratcher', 7)"><div class="shop-item-content"><img class="shop-item-image" src="https://media.istockphoto.com/id/1474831977/photo/young-british-kitten-sharpening-her-claws-in-the-living-room-expressive-green-eyes.jpg?s=612x612&w=0&k=20&c=G7lEGdCXri4Z-rX-mwjN6_c1V-SGW3OkS54oF6wkXK0=" alt="Scratcher"><strong class="item-text">Scratcher</strong><br /><span class="item-text"> +7 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('scratcher', 7)"><div class="shop-item-content"><strong class="item-text">Scratcher</strong><br /><span class="item-text"> +7 click value</span><br />
         <button id="scratcherBtn">Buy for <span class="item-cost" id="scratcherCost">700</span></button>
         <div class="upgrade-count" id="scratcherCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('kittenFactory', 15)"><div class="shop-item-content"><img class="shop-item-image" src="https://cdn.pixabay.com/photo/2020/02/20/12/12/cat-4864605_1280.jpg" alt="Kitten Factory"><strong class="item-text">Kitten Factory</strong><br /><span class="item-text"> +15 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('kittenFactory', 15)"><div class="shop-item-content"><strong class="item-text">Kitten Factory</strong><br /><span class="item-text"> +15 click value</span><br />
         <button id="kittenFactoryBtn">Buy for <span class="item-cost" id="kittenFactoryCost">5000</span></button>
         <div class="upgrade-count" id="kittenFactoryCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('cityOfKittens', 30)"><div class="shop-item-content"><img class="shop-item-image" src="https://cdn.pixabay.com/photo/2023/08/04/08/34/ai-generated-8168676_1280.jpg" alt="City of Kittens"><strong class="item-text">City of Kittens</strong><br /><span class="item-text"> +30 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('cityOfKittens', 30)"><div class="shop-item-content"><strong class="item-text">City of Kittens</strong><br /><span class="item-text"> +30 click value</span><br />
         <button id="cityOfKittensBtn">Buy for <span class="item-cost" id="cityOfKittensCost">30000</span></button>
         <div class="upgrade-count" id="cityOfKittensCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('worldOfMeows', 80)"><div class="shop-item-content"><img class="shop-item-image" src="https://media.istockphoto.com/id/898916122/photo/cat-astronaut-in-space-on-background-of-the-globe-elements-of-this-image-furnished-by-nasa.jpg?s=2048x2048&w=is&k=20&c=DhAVw_atm-4DbNys2PyUWw4c9gwH408rrDmmAuvH5a0=" alt="A World of Meows"><strong class="item-text">A World of Meows</strong><br /><span class="item-text"> +80 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('worldOfMeows', 80)"><div class="shop-item-content"><strong class="item-text">A World of Meows</strong><br /><span class="item-text"> +80 click value</span><br />
         <button id="worldOfMeowsBtn">Buy for <span class="item-cost" id="worldOfMeowsCost">200000</span></button>
         <div class="upgrade-count" id="worldOfMeowsCount">0</div>
       </div></div>
-      <div class="shop-item" onclick="buyUpgrade('goldKitty', 150)"><div class="shop-item-content"><img class="shop-item-image" src="https://cdn.pixabay.com/photo/2024/04/05/19/08/cat-8678042_1280.png" alt="Gold Kitty"><strong class="item-text">Gold Kitty</strong><br /><span class="item-text"> +150 click value</span><br />
+      <div class="shop-item" onclick="buyUpgrade('goldKitty', 150)"><div class="shop-item-content"><strong class="item-text">Gold Kitty</strong><br /><span class="item-text"> +150 click value</span><br />
         <button id="goldKittyBtn">Buy for <span class="item-cost" id="goldKittyCost">15000000</span></button>
         <div class="upgrade-count" id="goldKittyCount">0</div>
       </div></div>
@@ -1277,24 +1248,7 @@
         <div class="upgrade-count" id="goldenPawsCount">0</div>
       </div>
     </div>
-    <div id="offlineContent" class="shop-tab-content">
-      <div class="shop-item" onclick="buyOfflineClick()"><div class="shop-item-content"><strong class="item-text">Idle Paws</strong><br /><span class="item-text"> +1 offline click/sec</span><br />
-        <button id="offlineClickBtn">Buy for <span class="item-cost" id="offlineClickCost">5000</span></button>
-        <div class="upgrade-count" id="offlineClickCount">0</div>
-      </div></div>
-      <div class="shop-item" onclick="buyOfflineEfficiency()"><div class="shop-item-content"><strong class="item-text">Efficiency Training</strong><br /><span class="item-text"> +3% offline bonus</span><br />
-        <button id="offlineEfficiencyBtn">Buy for <span class="item-cost" id="offlineEfficiencyCost">250000</span></button>
-        <div class="upgrade-count" id="offlineEfficiencyCount">0</div>
-      </div></div>
-      <div class="shop-item" onclick="buyOfflineHibernate()"><div class="shop-item-content"><strong class="item-text">Hibernate Mode</strong><br /><span class="item-text"> +0.2 offline click/sec</span><br />
-        <button id="offlineHibernateBtn">Buy for <span class="item-cost" id="offlineHibernateCost">500000</span></button>
-        <div class="upgrade-count" id="offlineHibernateCount">0</div>
-      </div></div>
-      <div class="shop-item" onclick="buyOfflineTimeCapsule()"><div class="shop-item-content"><strong class="item-text">Time Capsule</strong><br /><span class="item-text"> +10% offline bonus</span><br />
-        <button id="offlineTimeCapsuleBtn">Buy for <span class="item-cost" id="offlineTimeCapsuleCost">1000000</span></button>
-        <div class="upgrade-count" id="offlineTimeCapsuleCount">0</div>
-      </div></div>
-    </div>
+    
     <div id="bundlesContent" class="shop-tab-content">
       <div id="bundlesContainer"></div>
     </div>
@@ -1354,22 +1308,6 @@
     <label><span class="setting-title">Disable Animations:</span>
       <input type="checkbox" id="disableAnimations">
     </label>
-  </div>
-  <div class="setting-row">
-    <label><span class="setting-title">Spacebar Click:</span>
-      <input type="checkbox" id="keyboardClickToggle" checked>
-      Enable
-    </label>
-  </div>
-  <div class="setting-row">
-    <label><span class="setting-title">Mute Sounds:</span>
-      <input type="checkbox" id="muteAudioToggle">
-    </label>
-  </div>
-  <div class="setting-row">
-    <label for="goldenSpawnRate"><span class="setting-title">Golden Kitten Frequency:</span></label>
-    <input type="range" min="0.5" max="2" step="0.1" id="goldenSpawnRate" value="1">
-    <small>(0.5=slower, 2=faster)</small>
   </div>
   <div class="setting-row">
     <label><span class="setting-title">Console:</span></label>
@@ -1446,7 +1384,7 @@ let upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0
 let upgradeCosts = {milkBowl:50,catFood:200,scratcher:800,kittenFactory:5000,cityOfKittens:25000,worldOfMeows:100000,autoClicker:500,autoKittenFarm:2500,kittenPlanet:1000000,goldKitty:2000000,nebulaCursor:750000,starForge:5000000};
 let selectedBreed = "american_shorthair";
 let breedsUnlocked = {
-    american_shorthair: true, 
+    american_shorthair: true,
     maine_coon: false, 
     siamese: false,
     himalayan: false,
@@ -1466,6 +1404,7 @@ let breedImages = {
     himalayan: "https://cdn.pixabay.com/photo/2016/03/24/21/21/cat-1277665_1280.jpg",
     halloween_cat: "https://cdn.pixabay.com/photo/2022/08/06/15/46/halloween-7368864_1280.jpg",
     christmas_kitten: "https://cdn.pixabay.com/photo/2016/12/11/02/32/cat-1898638_1280.jpg",
+    
     ragdoll: "https://cdn.pixabay.com/photo/2018/06/28/14/12/cat-3504008_1280.jpg",
     persian: "https://cdn.pixabay.com/photo/2017/01/21/08/19/cat-1996569_1280.jpg",
     bengal: "https://cdn.pixabay.com/photo/2022/11/17/17/46/cat-7598590_1280.jpg",
@@ -1480,6 +1419,7 @@ let breedNames = {
     himalayan: "Himalayan",
     halloween_cat: "Halloween Cat",
     christmas_kitten: "Christmas Kitten",
+    
     ragdoll: "Ragdoll",
     persian: "Persian",
     bengal: "Bengal",
@@ -1494,6 +1434,7 @@ let extraCPSBreed = {
     himalayan: 25,
     halloween_cat: 200,
     christmas_kitten: 250,
+    
     ragdoll: 40,
     persian: 35,
     bengal: 60,
@@ -1506,7 +1447,7 @@ let fusionRecipes = {
   "himalayan|persian": "mythic_chimera",
   "ragdoll|bengal": "wild_ragdoll"
 };
-  let achievementsData = [
+let achievementsData = [
     // Early game / tutorial
     { id: 'click1', text: 'CLICK: Click the kitten!', achieved: false, condition: () => kittens > 0 },
     { id: 'milkBowl1', text: 'You have to start somewhere: Buy your first Milk Bowl', achieved: false, condition: () => upgrades.milkBowl >= 1 },
@@ -1552,7 +1493,7 @@ let fusionRecipes = {
     // Special / rare
     { id: 'rich_kitty', text: 'Rich Kitty | Reach 100,000 kittens in a single run', achieved: false, condition: () => kittens >= 100000 },
     
-  ];
+];
 achievementsData.push(
   { id: 'cps1k', text: 'Speed Paw | Reach 1,000 CPS', achieved: false, condition: () => (upgrades.autoClicker * 5 + upgrades.autoKittenFarm * 7 + upgrades.kittenPlanet * 30 + (extraCPSBreed[selectedBreed] || 0)) >= 1000 },
   { id: 'cps10k', text: 'Blizzard of Paws | Reach 10,000 CPS', achieved: false, condition: () => (upgrades.autoClicker * 5 + upgrades.autoKittenFarm * 7 + upgrades.kittenPlanet * 30 + (extraCPSBreed[selectedBreed] || 0)) >= 10000 },
@@ -1570,10 +1511,7 @@ achievementsData.push(
     theme: "pink",
     floatScore: true,
     notifVolume: 1,
-    disableAnimations: false,
-    keyboardClick: true,
-    muteAudio: false,
-    goldenSpawnMultiplier: 1
+    disableAnimations: false
   };
 
   // Bonus upgrades data
@@ -1623,56 +1561,14 @@ achievementsData.push(
   let goldenBoostCPS = 0;
   let goldenBoostTimer = null;
 
-  let offlineClicks = 0;
-  let offlineClickCost = 5000;
-  let offlineEfficiency = 0;
-  let offlineEfficiencyCost = 250000;
-  let offlineHibernate = 0;
-  let offlineHibernateCost = 500000;
-  let offlineTimeCapsule = 0;
-  let offlineTimeCapsuleCost = 1000000;
   
 
   // --- SETTINGS LOGIC ---
-  (function earlyHydrate() {
-    try {
-      const saved = localStorage.getItem('kittenSave');
-      if (saved) {
-        let data = null;
-        try { data = JSON.parse(saved); }
-        catch(_) { try { data = JSON.parse(atob(saved)); } catch(_) {} }
-        if (data) {
-          if (data.kittens !== undefined) kittens = data.kittens;
-          if (data.clickValue !== undefined) clickValue = data.clickValue;
-          if (data.upgrades) upgrades = data.upgrades;
-          if (data.upgradeCosts) upgradeCosts = data.upgradeCosts;
-          if (data.selectedBreed) selectedBreed = data.selectedBreed;
-          if (data.breedsUnlocked) breedsUnlocked = data.breedsUnlocked;
-          if (data.userSettings) userSettings = data.userSettings;
-          if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
-          if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
-          if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
-          if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
-          if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
-          if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
-          if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
-          if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
-          if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
-          if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
-          if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
-          if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
-        }
-      }
-    } catch(_) {}
-  })();
   function updateSettingsUI() {
     document.getElementById('themeSelect').value = userSettings.theme;
     document.getElementById('floatScoreToggle').checked = userSettings.floatScore;
     document.getElementById('notifVolume').value = userSettings.notifVolume;
     document.getElementById('disableAnimations').checked = userSettings.disableAnimations;
-    const kc = document.getElementById('keyboardClickToggle'); if (kc) kc.checked = userSettings.keyboardClick;
-    const ma = document.getElementById('muteAudioToggle'); if (ma) ma.checked = userSettings.muteAudio;
-    const gr = document.getElementById('goldenSpawnRate'); if (gr) gr.value = userSettings.goldenSpawnMultiplier;
   }
   
   function applyTheme(theme) {
@@ -1738,8 +1634,6 @@ achievementsData.push(
           label += `<span class="breed-lock">🔒 (25 achievements required)</span>`;
         } else if (breed === "bengal") {
           label += `<span class="breed-lock">🔒 (30 achievements required)</span>`;
-        } else if (breed === "cat_of_the_cosmos") {
-          label += `<span class="breed-lock">🔒 (25 achievements required)</span>`;
         }
       }
 
@@ -2055,7 +1949,7 @@ achievementsData.push(
   function initApp() {
     try {
       resetOverlays();
-      typeof ensureKittenImg === 'function' && ensureKittenImg();
+      ensureKittenImg && ensureKittenImg();
       attachKittenHandlers();
       scheduleGoldenKitten();
       if (goldenKittenEl) {
@@ -2069,7 +1963,7 @@ achievementsData.push(
       renderDynamicShop();
       renderBundles();
       updatePrestigeInfo();
-      if (serverEnabled) {
+      if (location.protocol !== 'file:') {
         startHeartbeat();
         startPlayerCountStream();
         updatePlayerCount();
@@ -2122,9 +2016,6 @@ achievementsData.push(
 
   // Save user data to /userlist
   async function saveToUserList() {
-    if (!serverEnabled || !navigator.onLine) {
-      return;
-    }
     // Use tracking ID (userId if authenticated, sessionId if not)
     const trackingId = getTrackingId();
     
@@ -2171,52 +2062,6 @@ achievementsData.push(
       }
     } catch (error) {
       console.error('Error saving to user list:', error);
-    }
-  }
-
-  async function loadFromUserList() {
-    if (!serverEnabled || !navigator.onLine) {
-      return false;
-    }
-    const trackingId = getTrackingId();
-    if (!trackingId) {
-      return false;
-    }
-    try {
-      const res = await fetch('/userlist?userId=' + encodeURIComponent(trackingId), { method: 'GET' });
-      if (!res.ok) return false;
-      const data = await res.json();
-      if (!data) return false;
-      kittens = data.kittens ?? kittens;
-      clickValue = data.clickValue ?? clickValue;
-      upgrades = data.upgrades ?? upgrades;
-      upgradeCosts = data.upgradeCosts ?? upgradeCosts;
-      selectedBreed = data.selectedBreed ?? selectedBreed;
-      breedsUnlocked = data.breedsUnlocked ?? breedsUnlocked;
-      if (Array.isArray(data.achievementsData)) {
-        for (let ach of data.achievementsData) {
-          const found = achievementsData.find(a => a.id === ach.id);
-          if (found) found.achieved = ach.achieved;
-        }
-      }
-      if (data.userSettings) {
-        userSettings = data.userSettings;
-      }
-      if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
-      if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
-      if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
-      if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
-      if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
-      if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
-      if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
-      if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
-      if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
-      if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
-      if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
-      if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
-      return true;
-    } catch (_) {
-      return false;
     }
   }
   
@@ -2276,8 +2121,6 @@ achievementsData.push(
     document.getElementById('clickValueContent').classList.remove('active');
     document.getElementById('autoContent').classList.remove('active');
     document.getElementById('bonusContent').classList.remove('active');
-    const offlineContent = document.getElementById('offlineContent');
-    if (offlineContent) offlineContent.classList.remove('active');
     const bundlesContent = document.getElementById('bundlesContent');
     if (bundlesContent) bundlesContent.classList.remove('active');
     
@@ -2285,8 +2128,6 @@ achievementsData.push(
     document.getElementById('tabClickValue').classList.remove('active');
     document.getElementById('tabAuto').classList.remove('active');
     document.getElementById('tabBonus').classList.remove('active');
-    const tabOffline = document.getElementById('tabOffline');
-    if (tabOffline) tabOffline.classList.remove('active');
     const tabBundles = document.getElementById('tabBundles');
     if (tabBundles) tabBundles.classList.remove('active');
     
@@ -2494,15 +2335,7 @@ achievementsData.push(
       }
     }
     
-    // Check for Cat of the Cosmos unlock
-    if (!breedsUnlocked.cat_of_the_cosmos) {
-      const achievementCount = achievementsData.filter(a => a.achieved).length;
-      if (achievementCount >= 25) {
-        breedsUnlocked.cat_of_the_cosmos = true;
-        showNotification("You unlocked the Cat of the Cosmos! It will remain unlocked.");
-        achievementsChanged = true;
-      }
-    }
+    
 
     
     
@@ -2515,19 +2348,15 @@ achievementsData.push(
   function attachKittenHandlers() {
     if (!kittenImg) return;
     if (kittenImg.__handlersAttached) return;
-  const onClick = () => {
-      if (clickSound && !userSettings.muteAudio) {
-        clickSound.currentTime = 0;
-        clickSound.volume = userSettings.notifVolume;
-        Promise.resolve(clickSound.play()).catch(()=>{});
-      }
+    const onClick = () => {
+      clickSound.currentTime = 0;
+      clickSound.volume = userSettings.notifVolume;
+      clickSound.play();
       manualClickCount++;
       if (manualClickCount % 100 === 0) {
-        if (meowSound && !userSettings.muteAudio) {
-          meowSound.currentTime = 0;
-          meowSound.volume = userSettings.notifVolume;
-          Promise.resolve(meowSound.play()).catch(()=>{});
-        }
+        meowSound.currentTime = 0;
+        meowSound.volume = userSettings.notifVolume;
+        meowSound.play();
       }
       registerManualClick(clickValue);
       createMultipleKittens(5);
@@ -2544,16 +2373,6 @@ achievementsData.push(
   // Attach immediately if possible and also on DOM ready
   attachKittenHandlers();
   document.addEventListener('DOMContentLoaded', attachKittenHandlers);
-  document.addEventListener('keydown', function(e) {
-    if (e.code === 'Space' && !e.repeat) {
-      const ae = document.activeElement;
-      const typing = ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable);
-      if (!typing && userSettings.keyboardClick) {
-        e.preventDefault();
-        if (kittenImg) kittenImg.click();
-      }
-    }
-  });
   
   function registerManualClick(baseValue) {
     streakCount++;
@@ -2567,7 +2386,6 @@ achievementsData.push(
     }
     const final = Math.floor(baseValue * streakMult * critMult);
     addScore(final);
-    saveProgress();
     if (critMult > 1 && userSettings.floatScore) {
       showFloatingScore(final);
     }
@@ -2585,8 +2403,7 @@ achievementsData.push(
   }
 
   function scheduleGoldenKitten() {
-    const base = 15000 + Math.floor(Math.random() * 30000);
-    const delay = Math.max(5000, Math.floor(base / Math.max(0.5, Math.min(2, userSettings.goldenSpawnMultiplier))));
+    const delay = 15000 + Math.floor(Math.random() * 30000);
     setTimeout(spawnGoldenKitten, delay);
   }
 
@@ -2620,7 +2437,6 @@ achievementsData.push(
       showFloatingScore(amount);
     updateUI();
     checkAchievements();
-    saveProgress();
   }
   
   function showFloatingScore(amount) {
@@ -2700,8 +2516,6 @@ achievementsData.push(
       breedClickBonus = 200;
     } else if (selectedBreed === 'christmas_kitten') {
       breedClickBonus = 150;
-    } else if (selectedBreed === 'cat_of_the_cosmos') {
-      breedClickBonus = 500;
     } else if (selectedBreed === 'ragdoll') {
       breedClickBonus = 30;
     } else if (selectedBreed === 'persian') {
@@ -2737,10 +2551,7 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorCost')) document.getElementById('nebulaCursorCost').textContent = upgradeCosts.nebulaCursor;
     if(document.getElementById('starForgeCost')) document.getElementById('starForgeCost').textContent = upgradeCosts.starForge;
     
-    if(document.getElementById('offlineClickCost')) document.getElementById('offlineClickCost').textContent = offlineClickCost;
-    if(document.getElementById('offlineEfficiencyCost')) document.getElementById('offlineEfficiencyCost').textContent = offlineEfficiencyCost;
-    if(document.getElementById('offlineHibernateCost')) document.getElementById('offlineHibernateCost').textContent = offlineHibernateCost;
-    if(document.getElementById('offlineTimeCapsuleCost')) document.getElementById('offlineTimeCapsuleCost').textContent = offlineTimeCapsuleCost;
+    // Update offline upgrade costs
     
     // Update button states for regular and auto upgrades
     if(document.getElementById('milkBowlBtn')) document.getElementById('milkBowlBtn').disabled = kittens < upgradeCosts.milkBowl;
@@ -2756,10 +2567,7 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorBtn')) document.getElementById('nebulaCursorBtn').disabled = kittens < upgradeCosts.nebulaCursor;
     if(document.getElementById('starForgeBtn')) document.getElementById('starForgeBtn').disabled = kittens < upgradeCosts.starForge;
 
-    if(document.getElementById('offlineClickBtn')) document.getElementById('offlineClickBtn').disabled = kittens < offlineClickCost;
-    if(document.getElementById('offlineEfficiencyBtn')) document.getElementById('offlineEfficiencyBtn').disabled = kittens < offlineEfficiencyCost;
-    if(document.getElementById('offlineHibernateBtn')) document.getElementById('offlineHibernateBtn').disabled = kittens < offlineHibernateCost;
-    if(document.getElementById('offlineTimeCapsuleBtn')) document.getElementById('offlineTimeCapsuleBtn').disabled = kittens < offlineTimeCapsuleCost;
+    // Update button states for offline upgrades
 
     // Update bonus upgrade costs and counts (one-time purchase logic)
     const bonusUpgradeNames = ['speedBoost', 'doublePoints', 'goldenPaws'];
@@ -2799,10 +2607,7 @@ achievementsData.push(
     if(document.getElementById('nebulaCursorCount')) document.getElementById('nebulaCursorCount').textContent = upgrades.nebulaCursor;
     if(document.getElementById('starForgeCount')) document.getElementById('starForgeCount').textContent = upgrades.starForge;
     
-    if(document.getElementById('offlineClickCount')) document.getElementById('offlineClickCount').textContent = offlineClicks;
-    if(document.getElementById('offlineEfficiencyCount')) document.getElementById('offlineEfficiencyCount').textContent = offlineEfficiency;
-    if(document.getElementById('offlineHibernateCount')) document.getElementById('offlineHibernateCount').textContent = offlineHibernate;
-    if(document.getElementById('offlineTimeCapsuleCount')) document.getElementById('offlineTimeCapsuleCount').textContent = offlineTimeCapsule;
+    // Update offline upgrade counts
     
     // Update prestige button state
     const requirement = Math.pow(10, 6 + prestigeLevel);
@@ -2826,7 +2631,6 @@ achievementsData.push(
       upgrades[name]++;
       upgradeCosts[name] = Math.ceil(upgradeCosts[name] * 1.3);
       updateUI();
-      saveProgress();
     }
   }
   
@@ -2836,7 +2640,6 @@ achievementsData.push(
       upgrades.autoClicker++;
       upgradeCosts.autoClicker = Math.ceil(upgradeCosts.autoClicker * 1.3);
       updateUI();
-      saveProgress();
     }
   }
   
@@ -2846,7 +2649,6 @@ achievementsData.push(
       upgrades.autoKittenFarm++;
       upgradeCosts.autoKittenFarm = Math.ceil(upgradeCosts.autoKittenFarm * 1.3);
       updateUI();
-      saveProgress();
     }
   }
   
@@ -2856,7 +2658,6 @@ achievementsData.push(
       upgrades.kittenPlanet++;
       upgradeCosts.kittenPlanet = Math.ceil(upgradeCosts.kittenPlanet * 1.3);
       updateUI();
-      saveProgress();
     }
   }
 
@@ -2866,7 +2667,6 @@ achievementsData.push(
       upgrades.nebulaCursor++;
       upgradeCosts.nebulaCursor = Math.ceil(upgradeCosts.nebulaCursor * 1.3);
       updateUI();
-      saveProgress();
     }
   }
 
@@ -2876,7 +2676,6 @@ achievementsData.push(
       upgrades.starForge++;
       upgradeCosts.starForge = Math.ceil(upgradeCosts.starForge * 1.3);
       updateUI();
-      saveProgress();
     }
   }
   
@@ -2894,7 +2693,6 @@ achievementsData.push(
       // No need to increase cost if it's a one-time purchase
       // bonusUpgradeCosts[name] = Math.ceil(bonusUpgradeCosts[name] * 1.2);
       updateUI();
-      saveProgress();
     }
   }
   
@@ -2905,21 +2703,11 @@ achievementsData.push(
     
     if (offlineTime <= 0) return 0;
     
-    let baseClicksPerSecond = (function(){
-      let breedCPS = extraCPSBreed[selectedBreed] || 0;
-      let gb = (typeof goldenBoostCPS !== 'undefined') ? goldenBoostCPS : 0;
-      return (
-        upgrades.autoClicker * 5 +
-        upgrades.autoKittenFarm * 7 +
-        upgrades.kittenPlanet * 30 +
-        upgrades.nebulaCursor * 15 +
-        upgrades.starForge * 120 +
-        breedCPS + gb
-      ) + offlineClicks + (offlineHibernate * 0.5);
-    })();
+    // Base offline clicks per second
+    let baseClicksPerSecond = offlineClicks;
     
     // Apply boosts
-    let boostMultiplier = 1 + (offlineEfficiency * 0.05) + (offlineTimeCapsule * 0.15);
+    let boostMultiplier = 1 + (offlineBoost * 0.5) + (offlineEmpire * 0.5);
     
     // Calculate total offline bonus
     const offlineBonus = baseClicksPerSecond * offlineTime * boostMultiplier;
@@ -2937,54 +2725,45 @@ achievementsData.push(
     }
   }
   
-  
+  // Buy offline click upgrade
   function buyOfflineClick() {
     if (kittens >= offlineClickCost) {
       kittens -= offlineClickCost;
       offlineClicks++;
-      offlineClickCost = Math.ceil(offlineClickCost * 1.6);
+      offlineClickCost = Math.ceil(offlineClickCost * 1.5);
       updateUI();
-      saveProgress();
     }
   }
-  function buyOfflineEfficiency() {
-    if (kittens >= offlineEfficiencyCost) {
-      kittens -= offlineEfficiencyCost;
-      offlineEfficiency++;
-      offlineEfficiencyCost = Math.ceil(offlineEfficiencyCost * 1.8);
+  
+  // Buy offline boost upgrade
+  function buyOfflineBoost() {
+    if (kittens >= offlineBoostCost) {
+      kittens -= offlineBoostCost;
+      offlineBoost++;
+      offlineBoostCost = Math.ceil(offlineBoostCost * 1.5);
       updateUI();
-      saveProgress();
     }
   }
-  function buyOfflineHibernate() {
-    if (kittens >= offlineHibernateCost) {
-      kittens -= offlineHibernateCost;
-      offlineHibernate++;
-      offlineHibernateCost = Math.ceil(offlineHibernateCost * 1.8);
+  
+  // Buy offline empire upgrade
+  function buyOfflineEmpire() {
+    if (kittens >= offlineEmpireCost) {
+      kittens -= offlineEmpireCost;
+      offlineEmpire++;
+      offlineEmpireCost = Math.ceil(offlineEmpireCost * 1.5);
       updateUI();
-      saveProgress();
-    }
-  }
-  function buyOfflineTimeCapsule() {
-    if (kittens >= offlineTimeCapsuleCost) {
-      kittens -= offlineTimeCapsuleCost;
-      offlineTimeCapsule++;
-      offlineTimeCapsuleCost = Math.ceil(offlineTimeCapsuleCost * 2.0);
-      updateUI();
-      saveProgress();
     }
   }
   
   setInterval(() => {
     let breedCPS = extraCPSBreed[selectedBreed] || 0;
-    let gb = (typeof goldenBoostCPS !== 'undefined') ? goldenBoostCPS : 0;
     const totalCPS = (
       upgrades.autoClicker * 5 +
       upgrades.autoKittenFarm * 7 +
       upgrades.kittenPlanet * 30 +
       upgrades.nebulaCursor * 15 +
       upgrades.starForge * 120 +
-      breedCPS + gb
+      breedCPS + goldenBoostCPS
     );
     if (totalCPS > 0) { addScore(totalCPS); }
   }, 1000);
@@ -2992,20 +2771,7 @@ achievementsData.push(
   window.selectBreed = function(breed) {
     if (!breedsUnlocked[breed]) return; // Do nothing if breed is locked
 
-    // Check if it's Cat of the Cosmos and requirements are met
-    if (breed === 'cat_of_the_cosmos') {
-      const achievementCount = achievementsData.filter(a => a.achieved).length;
-      if (achievementCount < 20) {
-        showNotification("You need 15 achievements to unlock the Cat of the Cosmos!");
-        return;
-      }
-      
-      // Unlock the breed if requirements are met
-      if (!breedsUnlocked[breed]) {
-        breedsUnlocked[breed] = true;
-        showNotification("You unlocked the Cat of the Cosmos! It will remain unlocked.");
-      }
-    }
+    
 
     // Check if it's halloween cat and requirements are met
     if (breed === 'halloween_cat') {
@@ -3051,8 +2817,8 @@ achievementsData.push(
         }
         
         const achievementCount = achievementsData.filter(a => a.achieved).length;
-        if (manualClickCount < 10000 || achievementCount < 8) {
-          showNotification("You need 10,000 clicks and 8 achievements to unlock the Christmas Kitten!");
+        if (kittens < 100000 || achievementCount < 12) {
+          showNotification("You need 100,000 kittens and 12 achievements to unlock the Christmas Kitten!");
           return;
         }
         
@@ -3077,20 +2843,17 @@ achievementsData.push(
   };
   
   function exportSave() {
-    const saveData = { kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, offlineEfficiency, offlineEfficiencyCost, offlineHibernate, offlineHibernateCost, offlineTimeCapsule, offlineTimeCapsuleCost, lastSeenTime };
-    const saveString = JSON.stringify(saveData);
+    const saveData = { kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, lastSeenTime };
+    const saveString = btoa(JSON.stringify(saveData));
     const textarea = document.getElementById('saveCodeBox');
     textarea.value = saveString;
     textarea.select();
-    try { navigator.clipboard.writeText(saveString); showNotification('Save code copied to clipboard'); } catch(_) {}
   }
   
   function loadSave() {
     const input = document.getElementById('loadSaveCode').value;
     try {
-      let data;
-      try { data = JSON.parse(input); }
-      catch(_) { data = JSON.parse(atob(input)); }
+      const data = JSON.parse(atob(input));
       kittens = data.kittens || 0;
       clickValue = data.clickValue || 1;
       upgrades = data.upgrades || upgrades;
@@ -3116,12 +2879,6 @@ achievementsData.push(
       if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
       if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
       if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
-      if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
-      if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
-      if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
-      if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
-      if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
-      if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
       if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
       updateUI();
       renderAchievements();
@@ -3151,21 +2908,12 @@ achievementsData.push(
   // Notification volume
   document.getElementById('notifVolume').addEventListener('input', function() {
     userSettings.notifVolume = parseFloat(this.value);
-    saveProgress();
   });
   
   // Disable animations
   document.getElementById('disableAnimations').addEventListener('change', function() {
     userSettings.disableAnimations = this.checked;
-    saveProgress();
   });
-
-  const kct = document.getElementById('keyboardClickToggle');
-  if (kct) kct.addEventListener('change', function(){ userSettings.keyboardClick = this.checked; saveProgress(); });
-  const mat = document.getElementById('muteAudioToggle');
-  if (mat) mat.addEventListener('change', function(){ userSettings.muteAudio = this.checked; saveProgress(); });
-  const gr = document.getElementById('goldenSpawnRate');
-  if (gr) gr.addEventListener('input', function(){ userSettings.goldenSpawnMultiplier = parseFloat(this.value); saveProgress(); });
   
   // Reset
   function resetProgress() {
@@ -3174,23 +2922,17 @@ achievementsData.push(
       upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0,nebulaCursor:0,starForge:0};
       upgradeCosts = {milkBowl:50,catFood:200,scratcher:800,kittenFactory:5000,cityOfKittens:25000,worldOfMeows:100000,autoClicker:500,autoKittenFarm:2500,kittenPlanet:1000000,goldKitty:2000000,nebulaCursor:750000,starForge:5000000};
       selectedBreed = "american_shorthair";
-      breedsUnlocked = { american_shorthair: true, maine_coon: false, siamese: false, himalayan: false, halloween_cat: false, christmas_kitten: false, cat_of_the_cosmos: false, ragdoll: false, persian: false, bengal: false, calico: false, sphynx: false, cosmic_maine: false, mythic_chimera: false, wild_ragdoll: false };
+      breedsUnlocked = { american_shorthair: true, maine_coon: false, siamese: false, himalayan: false, halloween_cat: false, christmas_kitten: false, ragdoll: false, persian: false, bengal: false, calico: false, sphynx: false, cosmic_maine: false, mythic_chimera: false, wild_ragdoll: false };
       for(let a of achievementsData) a.achieved = false;
       bonusUpgrades = { speedBoost: 0, doublePoints: 0, goldenPaws: 0 };
       bonusUpgradeCosts = { speedBoost: 5000, doublePoints: 15000, goldenPaws: 50000 };
       prestigeLevel = 0;
       offlineClicks = 0;
-      offlineClickCost = 5000;
+      offlineClickCost = 1000;
       offlineBoost = 0;
       offlineBoostCost = 5000;
       offlineEmpire = 0;
       offlineEmpireCost = 25000;
-      offlineEfficiency = 0;
-      offlineEfficiencyCost = 250000;
-      offlineHibernate = 0;
-      offlineHibernateCost = 500000;
-      offlineTimeCapsule = 0;
-      offlineTimeCapsuleCost = 1000000;
       lastSeenTime = 0;
       userSettings = {theme:"pink", floatScore:true, notifVolume:1, disableAnimations:false};
       applyTheme(userSettings.theme);
@@ -3199,73 +2941,37 @@ achievementsData.push(
     }
   }
 
-  function applySeasonalDecorations() {
-    const overlay = document.getElementById('shopOverlay');
-    const header = overlay ? overlay.querySelector('.shop-header h2') : null;
-    const now = new Date();
-    const month = now.getMonth() + 1;
-    const day = now.getDate();
-    if (overlay && month === 12 && day >= 1 && day <= 31) {
-      overlay.classList.add('christmas-shop');
-      if (header) header.textContent = 'Kitten Shop 🎄';
-    } else if (overlay) {
-      overlay.classList.remove('christmas-shop');
-      if (header) header.textContent = 'Kitten Shop';
-    }
-  }
-
   // --- SAVE/LOAD ON PAGE LOAD ---
-  window.addEventListener('load', async () => {
+  window.addEventListener('load', () => {
     try {
-      let loadedFromServer = false;
-      if (serverEnabled && navigator.onLine) {
-        try {
-          loadedFromServer = await loadFromUserList();
-        } catch(_) {}
-      }
-      if (!loadedFromServer) {
-        const saved = localStorage.getItem('kittenSave');
-        if (saved) {
-          let data = null;
-          try {
-            data = JSON.parse(saved);
-          } catch(_) {
-            try { data = JSON.parse(atob(saved)); } catch(_) {}
-          }
-          if (data) {
-          kittens = data.kittens || 0;
-          clickValue = data.clickValue || 1;
-          upgrades = data.upgrades || upgrades;
-          upgradeCosts = data.upgradeCosts || upgradeCosts;
-          selectedBreed = data.selectedBreed || "american_shorthair";
-          breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
-          if (Array.isArray(data.achievementsData)) {
-            for (let ach of data.achievementsData) {
-              const found = achievementsData.find(a => a.id === ach.id);
-              if (found) found.achieved = ach.achieved;
-            }
-          }
-          if (data.userSettings) {
-            userSettings = data.userSettings;
-          }
-          if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
-          if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
-          if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
-          if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
-          if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
-          if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
-          if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
-          if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
-          if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
-          if (data.offlineEfficiency !== undefined) offlineEfficiency = data.offlineEfficiency;
-          if (data.offlineEfficiencyCost !== undefined) offlineEfficiencyCost = data.offlineEfficiencyCost;
-          if (data.offlineHibernate !== undefined) offlineHibernate = data.offlineHibernate;
-          if (data.offlineHibernateCost !== undefined) offlineHibernateCost = data.offlineHibernateCost;
-          if (data.offlineTimeCapsule !== undefined) offlineTimeCapsule = data.offlineTimeCapsule;
-          if (data.offlineTimeCapsuleCost !== undefined) offlineTimeCapsuleCost = data.offlineTimeCapsuleCost;
-          if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
+      const saved = localStorage.getItem('kittenSave');
+      if (saved) {
+        const data = JSON.parse(atob(saved));
+        kittens = data.kittens || 0;
+        clickValue = data.clickValue || 1;
+        upgrades = data.upgrades || upgrades;
+        upgradeCosts = data.upgradeCosts || upgradeCosts;
+        selectedBreed = data.selectedBreed || "american_shorthair";
+        breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
+        if (Array.isArray(data.achievementsData)) {
+          for (let ach of data.achievementsData) {
+            const found = achievementsData.find(a => a.id === ach.id);
+            if (found) found.achieved = ach.achieved;
           }
         }
+        if (data.userSettings) {
+          userSettings = data.userSettings;
+        }
+        if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
+        if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
+        if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
+        if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
+        if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
+        if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
+        if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
+        if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
+        if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
+        if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
       }
     } catch (e) {}
     try {
@@ -3291,7 +2997,6 @@ achievementsData.push(
     if (shopOverlay) {
       shopOverlay.style.display = 'none';
     }
-    applySeasonalDecorations();
     
     // Check for offline bonus
     if (lastSeenTime > 0) {
@@ -3300,10 +3005,14 @@ achievementsData.push(
     
     // Update last seen time
     lastSeenTime = Date.now();
-    saveProgress();
   });
   
-  // Server saves are triggered inside saveProgress(); interval below handles cadence
+  // Save to userlist every 5 seconds
+  setInterval(() => {
+    try {
+      saveToUserList();
+    } catch (e) {}
+  }, 5000);
 
   // --- MYSTERY KITTEN RANDOM SPAWN ---
   let mysteryKittenTimeout = null;
@@ -3444,56 +3153,35 @@ achievementsData.push(
   // --- SHOP OPENING LOGIC ---
   // Shop is now opened via openOverlay() function like other overlays
 
-  function saveProgress() {
+  // --- SAVE TO LOCAL STORAGE EVERY 5 SECONDS ---
+  setInterval(() => {
     try {
-      lastSeenTime = Date.now();
-      const saveData = {
-        kittens,
-        clickValue,
-        upgrades,
-        upgradeCosts,
-        selectedBreed,
-        breedsUnlocked,
-        achievementsData,
-        userSettings,
-        bonusUpgrades,
-        bonusUpgradeCosts,
-        prestigeLevel,
-        offlineClicks,
-        offlineClickCost,
-        offlineBoost,
-        offlineBoostCost,
-        offlineEmpire,
-        offlineEmpireCost,
-        offlineEfficiency,
-        offlineEfficiencyCost,
-        offlineHibernate,
-        offlineHibernateCost,
-        offlineTimeCapsule,
-        offlineTimeCapsuleCost,
-        lastSeenTime
+      const saveData = { 
+        kittens, 
+        clickValue, 
+        upgrades, 
+        upgradeCosts, 
+        selectedBreed, 
+        breedsUnlocked, 
+        achievementsData, 
+        userSettings, 
+        bonusUpgrades, 
+        bonusUpgradeCosts, 
+        prestigeLevel, 
+        offlineClicks, 
+        offlineClickCost, 
+        offlineBoost, 
+        offlineBoostCost, 
+        offlineEmpire, 
+        offlineEmpireCost, 
+        lastSeenTime 
       };
-      localStorage.setItem('kittenSave', JSON.stringify(saveData));
-      if (serverEnabled && navigator.onLine) {
-        try { saveToUserList(); } catch(e) {}
-      }
+      const saveString = btoa(JSON.stringify(saveData));
+      localStorage.setItem('kittenSave', saveString);
+      
+      
     } catch (e) {}
-  }
-
-  setInterval(saveProgress, 5000);
-
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      saveProgress();
-    }
-  });
-
-  window.addEventListener('beforeunload', function() {
-    saveProgress();
-  });
-  window.addEventListener('pagehide', function() {
-    saveProgress();
-  });
+  }, 5000);
 
   // --- PRESTIGE LOGIC ---
   prestigeButton.addEventListener('click', function() {
@@ -3521,5 +3209,3 @@ achievementsData.push(
 </script>
 </body>
 </html>
-  // Server integration toggle
-  const serverEnabled = false;
