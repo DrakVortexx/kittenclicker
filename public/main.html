@@ -1378,6 +1378,27 @@ function getTrackingId() {
   return userId || getSessionId();
 }
 
+// Safe Base64 encode/decode that handles Unicode correctly
+function base64EncodeUnicode(str) {
+  // encodeURIComponent -> percent-encodes UTF-8, then convert percent encodings to raw bytes for btoa
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+    return String.fromCharCode('0x' + p1);
+  }));
+}
+
+function base64DecodeUnicode(str) {
+  // atob -> raw bytes, convert to percent-encoded string, then decodeURIComponent
+  try {
+    return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  } catch (e) {
+    // If decoding fails, return null to let caller handle
+    return null;
+  }
+}
+
+
 // Game state variables (existing code remains unchanged)
 let kittens = 0, clickValue = 1;
 let upgrades = {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0,nebulaCursor:0,starForge:0};
@@ -2843,8 +2864,8 @@ achievementsData.push(
   };
   
   function exportSave() {
-    const saveData = { kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, lastSeenTime };
-    const saveString = btoa(JSON.stringify(saveData));
+    const saveData = { kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, lastSeenTime, saveVersion: 1 };
+    const saveString = base64EncodeUnicode(JSON.stringify(saveData));
     const textarea = document.getElementById('saveCodeBox');
     textarea.value = saveString;
     textarea.select();
@@ -2853,7 +2874,9 @@ achievementsData.push(
   function loadSave() {
     const input = document.getElementById('loadSaveCode').value;
     try {
-      const data = JSON.parse(atob(input));
+      const decoded = base64DecodeUnicode(input);
+      if (!decoded) throw new Error('Invalid save data (decode failed)');
+      const data = JSON.parse(decoded);
       kittens = data.kittens || 0;
       clickValue = data.clickValue || 1;
       upgrades = data.upgrades || upgrades;
@@ -2946,8 +2969,10 @@ achievementsData.push(
     try {
       const saved = localStorage.getItem('kittenSave');
       if (saved) {
-        const data = JSON.parse(atob(saved));
-        kittens = data.kittens || 0;
+        const decoded = base64DecodeUnicode(saved);
+        if (decoded) {
+          const data = JSON.parse(decoded);
+          kittens = data.kittens || 0;
         clickValue = data.clickValue || 1;
         upgrades = data.upgrades || upgrades;
         upgradeCosts = data.upgradeCosts || upgradeCosts;
@@ -2972,6 +2997,10 @@ achievementsData.push(
         if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
         if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
         if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
+        } else {
+          // Corrupt save string — ignore it so game can continue
+          console.warn('Kitten Clicker: could not decode saved data (possibly corrupted)');
+        }
       }
     } catch (e) {}
     try {
@@ -3176,12 +3205,26 @@ achievementsData.push(
         offlineEmpireCost, 
         lastSeenTime 
       };
-      const saveString = btoa(JSON.stringify(saveData));
+      saveData.saveVersion = 1;
+      const saveString = base64EncodeUnicode(JSON.stringify(saveData));
       localStorage.setItem('kittenSave', saveString);
       
       
     } catch (e) {}
   }, 5000);
+
+  // Save once synchronously when the page is about to unload (helps when players leave before the 5s tick)
+  window.addEventListener('beforeunload', function() {
+    try {
+      const saveData = { 
+        kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, lastSeenTime, saveVersion: 1
+      };
+      const saveString = base64EncodeUnicode(JSON.stringify(saveData));
+      localStorage.setItem('kittenSave', saveString);
+    } catch (e) {
+      // If saving fails during unload, nothing we can do
+    }
+  });
 
   // --- PRESTIGE LOGIC ---
   prestigeButton.addEventListener('click', function() {
@@ -3209,4 +3252,3 @@ achievementsData.push(
 </script>
 </body>
 </html>
-
