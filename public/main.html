@@ -1414,10 +1414,25 @@ function saveGame() {
     }
 
     const saveData = {
-      kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked,
-      achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel,
-      offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire,
-      offlineEmpireCost, lastSeenTime, saveVersion: 1
+      kittens: (typeof kittens !== 'undefined' ? kittens : 0),
+      clickValue: (typeof clickValue !== 'undefined' ? clickValue : 1),
+      upgrades: (typeof upgrades !== 'undefined' ? upgrades : {}),
+      upgradeCosts: (typeof upgradeCosts !== 'undefined' ? upgradeCosts : {}),
+      selectedBreed: (typeof selectedBreed !== 'undefined' ? selectedBreed : 'american_shorthair'),
+      breedsUnlocked: (typeof breedsUnlocked !== 'undefined' ? breedsUnlocked : {}),
+      achievementsData: (typeof achievementsData !== 'undefined' ? achievementsData : []),
+      userSettings: (typeof userSettings !== 'undefined' ? userSettings : {theme:'pink',floatScore:true,notifVolume:1,disableAnimations:false}),
+      bonusUpgrades: (typeof bonusUpgrades !== 'undefined' ? bonusUpgrades : {}),
+      bonusUpgradeCosts: (typeof bonusUpgradeCosts !== 'undefined' ? bonusUpgradeCosts : {}),
+      prestigeLevel: (typeof prestigeLevel !== 'undefined' ? prestigeLevel : 0),
+      offlineClicks: (typeof offlineClicks !== 'undefined' ? offlineClicks : 0),
+      offlineClickCost: (typeof offlineClickCost !== 'undefined' ? offlineClickCost : 1000),
+      offlineBoost: (typeof offlineBoost !== 'undefined' ? offlineBoost : 0),
+      offlineBoostCost: (typeof offlineBoostCost !== 'undefined' ? offlineBoostCost : 5000),
+      offlineEmpire: (typeof offlineEmpire !== 'undefined' ? offlineEmpire : 0),
+      offlineEmpireCost: (typeof offlineEmpireCost !== 'undefined' ? offlineEmpireCost : 25000),
+      lastSeenTime: (typeof lastSeenTime !== 'undefined' ? lastSeenTime : Date.now()),
+      saveVersion: 1
     };
 
     // Try unicode-safe base64 encoding first; if it fails, fallback to plain JSON
@@ -2173,26 +2188,26 @@ achievementsData.push(
     
     try {
       const saveData = { 
-        userId: trackingId, 
-        playerCount: kittens, 
-        kittens, 
-        clickValue, 
-        upgrades, 
-        upgradeCosts, 
-        selectedBreed, 
-        breedsUnlocked, 
-        achievementsData, 
-        userSettings, 
-        bonusUpgrades, 
-        bonusUpgradeCosts, 
-        prestigeLevel, 
-        offlineClicks, 
-        offlineClickCost, 
-        offlineBoost, 
-        offlineBoostCost, 
-        offlineEmpire, 
-        offlineEmpireCost, 
-        lastSeenTime 
+        userId: trackingId,
+        playerCount: (typeof kittens !== 'undefined' ? kittens : 0),
+        kittens: (typeof kittens !== 'undefined' ? kittens : 0),
+        clickValue: (typeof clickValue !== 'undefined' ? clickValue : 1),
+        upgrades: (typeof upgrades !== 'undefined' ? upgrades : {}),
+        upgradeCosts: (typeof upgradeCosts !== 'undefined' ? upgradeCosts : {}),
+        selectedBreed: (typeof selectedBreed !== 'undefined' ? selectedBreed : 'american_shorthair'),
+        breedsUnlocked: (typeof breedsUnlocked !== 'undefined' ? breedsUnlocked : {}),
+        achievementsData: (typeof achievementsData !== 'undefined' ? achievementsData : []),
+        userSettings: (typeof userSettings !== 'undefined' ? userSettings : {}),
+        bonusUpgrades: (typeof bonusUpgrades !== 'undefined' ? bonusUpgrades : {}),
+        bonusUpgradeCosts: (typeof bonusUpgradeCosts !== 'undefined' ? bonusUpgradeCosts : {}),
+        prestigeLevel: (typeof prestigeLevel !== 'undefined' ? prestigeLevel : 0),
+        offlineClicks: (typeof offlineClicks !== 'undefined' ? offlineClicks : 0),
+        offlineClickCost: (typeof offlineClickCost !== 'undefined' ? offlineClickCost : 1000),
+        offlineBoost: (typeof offlineBoost !== 'undefined' ? offlineBoost : 0),
+        offlineBoostCost: (typeof offlineBoostCost !== 'undefined' ? offlineBoostCost : 5000),
+        offlineEmpire: (typeof offlineEmpire !== 'undefined' ? offlineEmpire : 0),
+        offlineEmpireCost: (typeof offlineEmpireCost !== 'undefined' ? offlineEmpireCost : 25000),
+        lastSeenTime: (typeof lastSeenTime !== 'undefined' ? lastSeenTime : Date.now())
       };
       
       const response = await fetch('/userlist', {
@@ -2991,7 +3006,27 @@ achievementsData.push(
   };
   
   function exportSave() {
-    const saveData = { kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, lastSeenTime, saveVersion: 1 };
+    const saveData = {
+      kittens: (typeof kittens !== 'undefined' ? kittens : 0),
+      clickValue: (typeof clickValue !== 'undefined' ? clickValue : 1),
+      upgrades: (typeof upgrades !== 'undefined' ? upgrades : {}),
+      upgradeCosts: (typeof upgradeCosts !== 'undefined' ? upgradeCosts : {}),
+      selectedBreed: (typeof selectedBreed !== 'undefined' ? selectedBreed : 'american_shorthair'),
+      breedsUnlocked: (typeof breedsUnlocked !== 'undefined' ? breedsUnlocked : {}),
+      achievementsData: (typeof achievementsData !== 'undefined' ? achievementsData : []),
+      userSettings: (typeof userSettings !== 'undefined' ? userSettings : {}),
+      bonusUpgrades: (typeof bonusUpgrades !== 'undefined' ? bonusUpgrades : {}),
+      bonusUpgradeCosts: (typeof bonusUpgradeCosts !== 'undefined' ? bonusUpgradeCosts : {}),
+      prestigeLevel: (typeof prestigeLevel !== 'undefined' ? prestigeLevel : 0),
+      offlineClicks: (typeof offlineClicks !== 'undefined' ? offlineClicks : 0),
+      offlineClickCost: (typeof offlineClickCost !== 'undefined' ? offlineClickCost : 1000),
+      offlineBoost: (typeof offlineBoost !== 'undefined' ? offlineBoost : 0),
+      offlineBoostCost: (typeof offlineBoostCost !== 'undefined' ? offlineBoostCost : 5000),
+      offlineEmpire: (typeof offlineEmpire !== 'undefined' ? offlineEmpire : 0),
+      offlineEmpireCost: (typeof offlineEmpireCost !== 'undefined' ? offlineEmpireCost : 25000),
+      lastSeenTime: (typeof lastSeenTime !== 'undefined' ? lastSeenTime : Date.now()),
+      saveVersion: 1
+    };
     const saveString = base64EncodeUnicode(JSON.stringify(saveData));
     const textarea = document.getElementById('saveCodeBox');
     textarea.value = saveString;
@@ -3122,13 +3157,15 @@ achievementsData.push(
       shopOverlay.style.display = 'none';
     }
     
-    // Check for offline bonus
-    if (lastSeenTime > 0) {
+    // Check for offline bonus (guard if variable not yet defined)
+    if (typeof lastSeenTime !== 'undefined' && lastSeenTime > 0) {
       showOfflineBonus();
     }
     
     // Update last seen time
-    lastSeenTime = Date.now();
+    if (typeof lastSeenTime !== 'undefined') {
+      lastSeenTime = Date.now();
+    }
   });
   
   // Save to userlist every 5 seconds
