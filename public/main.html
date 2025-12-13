@@ -431,7 +431,7 @@
     width:100%; 
     height:100%;
     background:rgba(255, 255, 255, 0.95); 
-    z-index:1000; 
+    z-index:1002; 
     padding:60px 20px 20px; 
     overflow-y:auto; 
     box-sizing:border-box; 
@@ -1443,7 +1443,8 @@ function saveGame() {
     }
   } catch (e) {
     console.warn('Unexpected save error:', e);
-    return { ok: false, reason: 'unexpected error' };
+    const msg = (e && e.message) ? e.message : String(e);
+    return { ok: false, reason: 'unexpected error: ' + msg };
   }
 }
 
