@@ -1257,7 +1257,7 @@
 
 <div class="top-buttons">
   <button onclick="openOverlay('shopOverlay')"><i class="fas fa-shopping-cart"></i> Shop</button>
-  <button onclick="(function(){ if(saveGame()) showNotification('Game saved'); else showNotification('Save failed'); })()"><i class="fas fa-save"></i> Save</button>
+  <button onclick="manualSave()"><i class="fas fa-save"></i> Save</button>
   <button onclick="openOverlay('progressOverlay')"><i class="fas fa-save"></i> Progress</button>
   <button onclick="openOverlay('settingsOverlay')"><i class="fas fa-cog"></i> Settings</button>
   <button onclick="openOverlay('achievementsOverlay')"><i class="fas fa-trophy"></i> Achievements</button>
@@ -1402,19 +1402,48 @@ function base64DecodeUnicode(str) {
 
 // Centralized save/load functions
 function saveGame() {
+  // Return object {ok: boolean, reason?: string}
   try {
+    // Quick localStorage availability test
+    try {
+      localStorage.setItem('__kitten_save_test__', '1');
+      localStorage.removeItem('__kitten_save_test__');
+    } catch (e) {
+      console.warn('LocalStorage not available:', e);
+      return { ok: false, reason: 'localStorage unavailable (private mode or disabled)' };
+    }
+
     const saveData = {
       kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked,
       achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel,
       offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire,
       offlineEmpireCost, lastSeenTime, saveVersion: 1
     };
-    const saveString = base64EncodeUnicode(JSON.stringify(saveData));
-    localStorage.setItem('kittenSave', saveString);
-    return true;
+
+    // Try unicode-safe base64 encoding first; if it fails, fallback to plain JSON
+    let saveString;
+    try {
+      saveString = base64EncodeUnicode(JSON.stringify(saveData));
+    } catch (e) {
+      console.warn('Base64 encode failed, falling back to JSON string:', e);
+      try {
+        saveString = JSON.stringify(saveData);
+      } catch (e2) {
+        console.warn('JSON stringify failed during fallback:', e2);
+        return { ok: false, reason: 'encoding failed' };
+      }
+    }
+
+    try {
+      localStorage.setItem('kittenSave', saveString);
+      return { ok: true };
+    } catch (e) {
+      console.warn('localStorage.setItem failed:', e);
+      return { ok: false, reason: 'localStorage setItem failed (quota or disabled)' };
+    }
   } catch (e) {
-    console.warn('Failed to save game:', e);
-    return false;
+    console.warn('Unexpected save error:', e);
+    return { ok: false, reason: 'unexpected error' };
   }
 }
 
@@ -1483,12 +1512,14 @@ function loadGame() {
 
 // Manual save helper for UI
 function manualSave() {
-  if (saveGame()) {
+  const res = saveGame();
+  if (res && res.ok) {
     const t = new Date();
     showNotification('Game saved — ' + t.toLocaleTimeString());
     return true;
   } else {
-    showNotification('Save failed');
+    const reason = (res && res.reason) ? res.reason : 'unknown';
+    showNotification('Save failed: ' + reason);
     return false;
   }
 }
