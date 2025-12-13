@@ -1257,6 +1257,7 @@
 
 <div class="top-buttons">
   <button onclick="openOverlay('shopOverlay')"><i class="fas fa-shopping-cart"></i> Shop</button>
+  <button onclick="(function(){ if(saveGame()) showNotification('Game saved'); else showNotification('Save failed'); })()"><i class="fas fa-save"></i> Save</button>
   <button onclick="openOverlay('progressOverlay')"><i class="fas fa-save"></i> Progress</button>
   <button onclick="openOverlay('settingsOverlay')"><i class="fas fa-cog"></i> Settings</button>
   <button onclick="openOverlay('achievementsOverlay')"><i class="fas fa-trophy"></i> Achievements</button>
@@ -1274,7 +1275,8 @@
 <div id="progressOverlay" class="overlay">
   <button class="closeOverlay" onclick="closeOverlay('progressOverlay')">×</button>
   <h2>Save / Load Progress</h2>
-  <button onclick="exportSave()">Get Save Code</button><br />
+  <button onclick="exportSave()">Get Save Code</button>
+  <button onclick="manualSave()">Save Now</button><br />
   <textarea id="saveCodeBox" readonly placeholder="Your save code will appear here after clicking 'Get Save Code'"></textarea><br />
   <input type="text" id="loadSaveCode" placeholder="Paste your save code here" />
   <button onclick="loadSave()">Load Save Code</button>
@@ -1395,6 +1397,99 @@ function base64DecodeUnicode(str) {
   } catch (e) {
     // If decoding fails, return null to let caller handle
     return null;
+  }
+}
+
+// Centralized save/load functions
+function saveGame() {
+  try {
+    const saveData = {
+      kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked,
+      achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel,
+      offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire,
+      offlineEmpireCost, lastSeenTime, saveVersion: 1
+    };
+    const saveString = base64EncodeUnicode(JSON.stringify(saveData));
+    localStorage.setItem('kittenSave', saveString);
+    return true;
+  } catch (e) {
+    console.warn('Failed to save game:', e);
+    return false;
+  }
+}
+
+function loadGame() {
+  try {
+    const saved = localStorage.getItem('kittenSave');
+    if (!saved) return false;
+    const decoded = base64DecodeUnicode(saved);
+    if (!decoded) return false;
+    const data = JSON.parse(decoded);
+    // Migration: if saveVersion missing or older, upgrade to current schema
+    const version = data.saveVersion || 0;
+    if (version < 1) {
+      // Ensure expected fields exist with safe defaults
+      data.kittens = data.kittens || 0;
+      data.clickValue = data.clickValue || 1;
+      data.upgrades = data.upgrades || {milkBowl:0,catFood:0,scratcher:0,kittenFactory:0,cityOfKittens:0,worldOfMeows:0,autoClicker:0,autoKittenFarm:0,kittenPlanet:0,goldKitty:0,nebulaCursor:0,starForge:0};
+      data.upgradeCosts = data.upgradeCosts || {milkBowl:50,catFood:200,scratcher:800,kittenFactory:5000,cityOfKittens:25000,worldOfMeows:100000,autoClicker:500,autoKittenFarm:2500,kittenPlanet:1000000,goldKitty:2000000,nebulaCursor:750000,starForge:5000000};
+      data.selectedBreed = data.selectedBreed || "american_shorthair";
+      data.breedsUnlocked = data.breedsUnlocked || { american_shorthair: true };
+      data.userSettings = data.userSettings || {theme: 'pink', floatScore: true, notifVolume: 1, disableAnimations: false};
+      data.bonusUpgrades = data.bonusUpgrades || { speedBoost: 0, doublePoints: 0, goldenPaws: 0 };
+      data.bonusUpgradeCosts = data.bonusUpgradeCosts || { speedBoost: 5000, doublePoints: 15000, goldenPaws: 50000 };
+      data.prestigeLevel = data.prestigeLevel || 0;
+      data.offlineClicks = data.offlineClicks || 0;
+      data.offlineClickCost = data.offlineClickCost || 1000;
+      data.offlineBoost = data.offlineBoost || 0;
+      data.offlineBoostCost = data.offlineBoostCost || 5000;
+      data.offlineEmpire = data.offlineEmpire || 0;
+      data.offlineEmpireCost = data.offlineEmpireCost || 25000;
+      data.lastSeenTime = data.lastSeenTime || Date.now();
+      // Mark upgraded
+      data.saveVersion = 1;
+      try { localStorage.setItem('kittenSave', base64EncodeUnicode(JSON.stringify(data))); } catch(e) {}
+      console.info('Migrated kittenSave from version', version, 'to 1');
+    }
+    kittens = data.kittens || 0;
+    clickValue = data.clickValue || 1;
+    upgrades = data.upgrades || upgrades;
+    upgradeCosts = data.upgradeCosts || upgradeCosts;
+    selectedBreed = data.selectedBreed || "american_shorthair";
+    breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
+    if (Array.isArray(data.achievementsData)) {
+      for (let ach of data.achievementsData) {
+        const found = achievementsData.find(a => a.id === ach.id);
+        if (found) found.achieved = ach.achieved;
+      }
+    }
+    if (data.userSettings) userSettings = data.userSettings;
+    if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
+    if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
+    if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
+    if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
+    if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
+    if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
+    if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
+    if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
+    if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
+    if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
+    return true;
+  } catch (e) {
+    console.warn('Failed to load saved game (corrupt or invalid):', e);
+    return false;
+  }
+}
+
+// Manual save helper for UI
+function manualSave() {
+  if (saveGame()) {
+    const t = new Date();
+    showNotification('Game saved — ' + t.toLocaleTimeString());
+    return true;
+  } else {
+    showNotification('Save failed');
+    return false;
   }
 }
 
@@ -2967,42 +3062,10 @@ achievementsData.push(
   // --- SAVE/LOAD ON PAGE LOAD ---
   window.addEventListener('load', () => {
     try {
-      const saved = localStorage.getItem('kittenSave');
-      if (saved) {
-        const decoded = base64DecodeUnicode(saved);
-        if (decoded) {
-          const data = JSON.parse(decoded);
-          kittens = data.kittens || 0;
-        clickValue = data.clickValue || 1;
-        upgrades = data.upgrades || upgrades;
-        upgradeCosts = data.upgradeCosts || upgradeCosts;
-        selectedBreed = data.selectedBreed || "american_shorthair";
-        breedsUnlocked = data.breedsUnlocked || breedsUnlocked;
-        if (Array.isArray(data.achievementsData)) {
-          for (let ach of data.achievementsData) {
-            const found = achievementsData.find(a => a.id === ach.id);
-            if (found) found.achieved = ach.achieved;
-          }
-        }
-        if (data.userSettings) {
-          userSettings = data.userSettings;
-        }
-        if (data.bonusUpgrades) bonusUpgrades = data.bonusUpgrades;
-        if (data.bonusUpgradeCosts) bonusUpgradeCosts = data.bonusUpgradeCosts;
-        if (data.prestigeLevel !== undefined) prestigeLevel = data.prestigeLevel;
-        if (data.offlineClicks !== undefined) offlineClicks = data.offlineClicks;
-        if (data.offlineClickCost !== undefined) offlineClickCost = data.offlineClickCost;
-        if (data.offlineBoost !== undefined) offlineBoost = data.offlineBoost;
-        if (data.offlineBoostCost !== undefined) offlineBoostCost = data.offlineBoostCost;
-        if (data.offlineEmpire !== undefined) offlineEmpire = data.offlineEmpire;
-        if (data.offlineEmpireCost !== undefined) offlineEmpireCost = data.offlineEmpireCost;
-        if (data.lastSeenTime !== undefined) lastSeenTime = data.lastSeenTime;
-        } else {
-          // Corrupt save string — ignore it so game can continue
-          console.warn('Kitten Clicker: could not decode saved data (possibly corrupted)');
-        }
-      }
-    } catch (e) {}
+      loadGame();
+    } catch (e) {
+      console.warn('Error while loading game:', e);
+    }
     try {
       const savedTheme = localStorage.getItem('kittenTheme');
       if (savedTheme) {
@@ -3182,45 +3245,19 @@ achievementsData.push(
   // --- SHOP OPENING LOGIC ---
   // Shop is now opened via openOverlay() function like other overlays
 
-  // --- SAVE TO LOCAL STORAGE EVERY 5 SECONDS ---
+  // --- SAVE TO LOCAL STORAGE EVERY 10 SECONDS ---
   setInterval(() => {
     try {
-      const saveData = { 
-        kittens, 
-        clickValue, 
-        upgrades, 
-        upgradeCosts, 
-        selectedBreed, 
-        breedsUnlocked, 
-        achievementsData, 
-        userSettings, 
-        bonusUpgrades, 
-        bonusUpgradeCosts, 
-        prestigeLevel, 
-        offlineClicks, 
-        offlineClickCost, 
-        offlineBoost, 
-        offlineBoostCost, 
-        offlineEmpire, 
-        offlineEmpireCost, 
-        lastSeenTime 
-      };
-      saveData.saveVersion = 1;
-      const saveString = base64EncodeUnicode(JSON.stringify(saveData));
-      localStorage.setItem('kittenSave', saveString);
-      
-      
-    } catch (e) {}
-  }, 5000);
+      saveGame();
+    } catch (e) {
+      console.warn('Autosave failed:', e);
+    }
+  }, 10000);
 
   // Save once synchronously when the page is about to unload (helps when players leave before the 5s tick)
   window.addEventListener('beforeunload', function() {
     try {
-      const saveData = { 
-        kittens, clickValue, upgrades, upgradeCosts, selectedBreed, breedsUnlocked, achievementsData, userSettings, bonusUpgrades, bonusUpgradeCosts, prestigeLevel, offlineClicks, offlineClickCost, offlineBoost, offlineBoostCost, offlineEmpire, offlineEmpireCost, lastSeenTime, saveVersion: 1
-      };
-      const saveString = base64EncodeUnicode(JSON.stringify(saveData));
-      localStorage.setItem('kittenSave', saveString);
+      saveGame();
     } catch (e) {
       // If saving fails during unload, nothing we can do
     }
